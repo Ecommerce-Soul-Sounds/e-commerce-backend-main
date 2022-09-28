@@ -29,7 +29,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
     
-    private byte picture;
+    private byte[] picture;
     
     private Address address;
     
