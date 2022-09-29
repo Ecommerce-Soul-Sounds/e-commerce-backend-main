@@ -75,7 +75,7 @@ public class CartItemServiceTest {
 
     @Test
 	@Order(2)
-	@DisplayName("3. Create CartItem")
+	@DisplayName("2. Create CartItem")
 	public void TestCreateCreateItem() {
 
        cartItem3 = new CartItem(3, 3, product1, cart1);
