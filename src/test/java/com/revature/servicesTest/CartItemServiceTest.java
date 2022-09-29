@@ -89,7 +89,7 @@ public class CartItemServiceTest {
     @Test
 	@Order(3)
 	@DisplayName("3. Get all CartItems by Id")
-	void findAllByCartId() {
+	void TestfindAllByCartId() {
 
         when(cartItemServ.findAllByCartId(cartItem1)).thenReturn(dummyDb);
         assertEquals(dummyDb, cartItemServ.findAllByCartId(cartItem1));
@@ -98,7 +98,7 @@ public class CartItemServiceTest {
     @Test
 	@Order(4)
 	@DisplayName("4. Get CartItem by Id")
-	void findById() {
+	void TestfindById() {
 
         when(cartItemServ.findById(cartItem1.getId())).thenReturn(cartItem1);
         assertEquals(cartItem1, cartItemServ.findById(cartItem1.getId()));
@@ -109,7 +109,7 @@ public class CartItemServiceTest {
     @Test
 	@Order(5)
 	@DisplayName("5. Update CartItem")
-	void testUpdateCartItem() {
+	void TestUpdateCartItem() {
 
         cartItem1.setQuantity(4);
 
@@ -123,7 +123,7 @@ public class CartItemServiceTest {
     @Test
 	@Order(6)
 	@DisplayName("6. Delete CartItem")
-	void testDeleteCartItem() {
+	void TestDeleteCartItem() {
         doNothing().when(mockDao).delete(cartItem1);
         //act + assert step
         assertEquals(true, cartItemServ.delete(cartItem1));
