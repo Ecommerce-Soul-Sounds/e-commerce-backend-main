@@ -2,35 +2,48 @@ package com.revature.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.models.CartItem;
 import com.revature.repositories.CartItemRepository;
 
 @Service
+@Transactional
 public class CartItemService {
-    private final CartItemRepository cartItemRepo;
-
-    public CartItemService(CartItemRepository cartItemRepo){
-        this.cartItemRepo=cartItemRepo;
+    
+    @Autowired
+    private CartItemRepository cartItemRepository;
+   
+    public CartItemService(CartItemRepository cartItemRepository){
+        super();
+        this.cartItemRepository=cartItemRepository;
     }
+   
 
-    public CartItem create(CartItem cartItem){
-        return cartItemRepo.save(cartItem);
+
+    public int create(CartItem cartItem){
+        int id= cartItemRepository.save(cartItem).getId();
+        return (id>0)?1:0;
     }
 
     public  List<CartItem> findAllByCartId(CartItem cartItem){
-        return cartItemRepo.getAllByCartId(cartItem.getCart().getId());
+        return cartItemRepository.getAllByCartId(cartItem.getCart().getId());
 
     }
     public CartItem findById(int id){
-        return cartItemRepo.getById(id);
+        return cartItemRepository.getById(id);
     }
     public boolean update(CartItem cartItem){
-        return cartItemRepo.updateItem(cartItem.getQuantity(), cartItem.getId());
+        //return cartItemRepository.updateItem(cartItem.getQuantity(), cartItem.getId());
+        CartItem target = cartItemRepository.getById(cartItem.getId());
+		target.setQuantity(cartItem.getQuantity());
+		target.setId(cartItem.getId());
+		return (cartItemRepository.save(target) != null) ? true : false;
     }
     public boolean delete(CartItem cartItem){
-        cartItemRepo.delete(cartItem);
+        cartItemRepository.delete(cartItem);
         return true;
     }
     

@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.models.Order;
+import com.revature.models.CustomerOrder;
 @Transactional
-public interface OrderRepository extends JpaRepository<Order, Integer>  {
+public interface OrderRepository extends JpaRepository<CustomerOrder, Integer>  {
 	@Query(value="SELECT * FROM order WHERE order_id=?1", nativeQuery=true)
-	public List<Order> findByOrderID(int orderId);
+	public List<CustomerOrder> findByOrderID(int orderId);
 	
 	@Query(value="UPDATE order SET status_id=?1, WHERE order_id=?2", nativeQuery=true)
 	public boolean updatestatus(int OrderStatus, int OrderId);

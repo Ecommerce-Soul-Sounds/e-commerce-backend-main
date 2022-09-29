@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.models.Order;
+import com.revature.models.CustomerOrder;
 import com.revature.models.OrderStatus;
 import com.revature.repositories.OrderRepository;
 @Service
@@ -18,20 +18,20 @@ public class OrderService {
 		super();
 		this.orderRepository = orderRepository;
 	}
-	public int create(Order order) {
+	public int create(CustomerOrder order) {
 		int orderid=orderRepository.save(order).getId();
 		return (orderid>0)?1:0;
 	}
-	public List<Order> findAll() {
+	public List<CustomerOrder> findAll() {
         return orderRepository.findAll();
     }
-	public List<Order> findByOrderID(int orderId){
+	public List<CustomerOrder> findByOrderID(int orderId){
 		return orderRepository.findByOrderID(orderId);
 	}
-	public boolean updatestatus(OrderStatus orderStatus, Order OrderId) {
+	public boolean updatestatus(OrderStatus orderStatus, CustomerOrder OrderId) {
 		return orderRepository.updatestatus(orderStatus.getId(),OrderId.getId());
 	}
-	public boolean delete(Order order) {
+	public boolean delete(CustomerOrder order) {
 		orderRepository.delete(order);
 		return true;
 	}
