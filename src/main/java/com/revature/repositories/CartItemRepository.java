@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.models.CartItem;
-
 @Transactional
 public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     //get all by cart id

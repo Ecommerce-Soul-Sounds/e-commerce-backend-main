@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 //import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -23,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.revature.models.Address;
 import com.revature.models.Cart;
-import com.revature.models.Order;
+import com.revature.models.CustomerOrder;
 import com.revature.models.OrderStatus;
 import com.revature.models.User;
 import com.revature.models.Wishlist;
@@ -37,13 +38,13 @@ public class OrderTest {
 	private static OrderRepository mockdao;
 	@InjectMocks
 	private static OrderService oserv;
-	private static Order o1,o2;
+	private static CustomerOrder o1,o2;
 	private static User u1,u2;
 	private static Address a1,a2;
 	private static Wishlist w1,w2;
 	private static Cart c1,c2;
 	private static OrderStatus os1,os2;
-	static List<Order> dummydb;
+	static List<CustomerOrder> dummydb;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception{
 		mockdao = Mockito.mock(OrderRepository.class);
@@ -54,19 +55,19 @@ public class OrderTest {
 		c1= new Cart(1,date,4);
 		os1=new OrderStatus(1,"In-cart");	
 		u1=new User(1,"jowill@gmail.com","jowill","joel","will",new byte[1],a1,w1,c1);
-		o1 = new Order(1,u1,a1,c1,76.87,date,os1);
-		dummydb = new ArrayList<Order>();
+		o1 = new CustomerOrder(1,u1,a1,c1,76.87,date,os1);
+		dummydb = new ArrayList<CustomerOrder>();
 		dummydb.add(o1);
 	}
 	@Test
-	//@Order(1)
+	@Order(1)
 	@DisplayName("1. Mock Validation Sanity Test")
 	void checkMockInjection() {
 		assertThat(mockdao).isNotNull();
 		assertThat(oserv).isNotNull();
 }
 	@Test
-	//@Order(2)
+	@Order(2)
 	@DisplayName("2. Create Order Test")
 	void testCreateOrder() {
 		//arrange step
@@ -76,7 +77,7 @@ public class OrderTest {
 		c2= new Cart(2,date,3);
 		os2=new OrderStatus(2,"Paid");	
 		u2=new User(2,"dota2@gmail.com","dota2","Phantom","assassin",new byte[8],a2,w2,c2);
-	     o2 = new Order(2,u2,a2,c2,45.87,date,os2);
+	     o2 = new CustomerOrder(2,u2,a2,c2,45.87,date,os2);
 		
 		//here we will tell mockito what type of behavior to expect from calling certain methods from our dao
         when(mockdao.save(o2)).thenReturn(o2);
@@ -85,7 +86,7 @@ public class OrderTest {
 		assertEquals(1, oserv.create(o2));
 	}
 	@Test
-	//@Order(3)
+	@Order(3)
 	@DisplayName("3. Get all order list")
 	void testGetAllOrderList() {
 
@@ -94,7 +95,7 @@ public class OrderTest {
 
     }
 	@Test
-	//@Order(4)
+	@Order(4)
 	@DisplayName("4. Get Order By Id")
 	void testGetOrderById() {
 
@@ -103,7 +104,7 @@ public class OrderTest {
 
     }
 	@Test
-	//@Order(5)
+	@Order(5)
 	@DisplayName("5. Update Order status")
 	void testUpdateOrderStatus() {
 
@@ -116,7 +117,7 @@ public class OrderTest {
 
     }
 	 @Test
-	//@Order(6)
+	@Order(6)
 	@DisplayName("6. Delete order")
 		void testDeleteJobListing() {
 	        doNothing().when(mockdao).delete(o1);
