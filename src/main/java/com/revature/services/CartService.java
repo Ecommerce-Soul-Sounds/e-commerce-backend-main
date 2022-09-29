@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class CartService {
     }
 
     public boolean update(Cart cart){
-        return cartRepo.updateCart(cart.getDateModified(), cart.getTotalQuantity(), cart.getId());
+        return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId());
 
     }
     public boolean delete(Cart cart){
