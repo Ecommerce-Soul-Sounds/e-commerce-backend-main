@@ -32,7 +32,6 @@ public class CartService {
     }
 
     public boolean update(Cart cart){
-        //return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId());
 
         Cart target = cartRepo.getById(cart.getId());
         target.setDateModified(cart.getDateModified());
