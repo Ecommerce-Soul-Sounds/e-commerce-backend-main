@@ -14,7 +14,7 @@ import com.revature.repositories.CartItemRepository;
 public class CartItemService {
     
     @Autowired
-    private final CartItemRepository cartItemRepository;
+    private CartItemRepository cartItemRepository;
    
     public CartItemService(CartItemRepository cartItemRepository){
         super();
@@ -36,7 +36,11 @@ public class CartItemService {
         return cartItemRepository.getById(id);
     }
     public boolean update(CartItem cartItem){
-        return cartItemRepository.updateItem(cartItem.getQuantity(), cartItem.getId());
+        //return cartItemRepository.updateItem(cartItem.getQuantity(), cartItem.getId());
+        CartItem target = cartItemRepository.getById(cartItem.getId());
+		target.setQuantity(cartItem.getQuantity());
+		target.setId(cartItem.getId());
+		return (cartItemRepository.save(target) != null) ? true : false;
     }
     public boolean delete(CartItem cartItem){
         cartItemRepository.delete(cartItem);
