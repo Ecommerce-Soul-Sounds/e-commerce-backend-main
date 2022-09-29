@@ -63,8 +63,8 @@ public class CartServiceTest {
 
     @Test
 	@Order(2)
-	@DisplayName("3. Create Cart")
-	public void TestCreateCreate() {
+	@DisplayName("2. Create Cart")
+	public void TestCreateCart() {
 
         cart3 = new Cart(3,LocalDate.now(), 3);
 
