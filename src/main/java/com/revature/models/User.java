@@ -31,6 +31,8 @@ public class User {
     
     private byte[] picture;
     
+    @OneToOne
+    @JoinColumn(name="address_id", referencedColumnName="address_id")
     private Address address;
     
     @OneToOne

@@ -34,7 +34,7 @@ public class CustomerOrder {
 	private User customer;
 	
 	@ManyToOne
-	@JoinColumn(name = "address_id", referencedColumnName = "cart_id")
+	@JoinColumn(name = "address_id", referencedColumnName = "address_id")
 	private Address address;
 	
 	@OneToOne(cascade = CascadeType.ALL)
