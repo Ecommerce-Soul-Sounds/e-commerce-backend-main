@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.revature.models.Cart;
 import com.revature.models.CartItem;
 import com.revature.repositories.CartItemRepository;
 
@@ -32,6 +33,11 @@ public class CartItemService {
         return cartItemRepository.getAllByCartId(cartItem.getCart().getId());
 
     }
+
+	public List<CartItem> getCartItems(Cart cart) {
+		return cartItemRepository.getAllByCartId(cart.getId());
+	}
+
     public CartItem findById(int id){
         return cartItemRepository.getById(id);
     }
@@ -39,6 +45,7 @@ public class CartItemService {
         //return cartItemRepository.updateItem(cartItem.getQuantity(), cartItem.getId());
         CartItem target = cartItemRepository.getById(cartItem.getId());
 		target.setQuantity(cartItem.getQuantity());
+        target.setProduct(cartItem.getProduct());
 		target.setId(cartItem.getId());
 		return (cartItemRepository.save(target) != null) ? true : false;
     }
