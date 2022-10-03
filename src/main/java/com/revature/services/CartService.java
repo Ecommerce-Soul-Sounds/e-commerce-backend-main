@@ -37,7 +37,7 @@ public class CartService {
         target.setDateModified(cart.getDateModified());
 		target.setTotalQuantity(cart.getTotalQuantity());
 		target.setId(cart.getId());
-		return (cartRepo.save(target) != null) ? true : false;
+		return cartRepo.save(target) != null;
 
     }
     public boolean delete(Cart cart){

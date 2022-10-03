@@ -28,7 +28,7 @@ import com.revature.services.CartService;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CartServiceTest {
+class CartServiceTest {
     @Mock 
     private static CartRepository mockDao;
 
@@ -64,7 +64,7 @@ public class CartServiceTest {
     @Test
 	@Order(2)
 	@DisplayName("2. Create Cart")
-	public void TestCreateCart() {
+	void TestCreateCart() {
 
         cart3 = new Cart(3,LocalDate.now(), 3);
 

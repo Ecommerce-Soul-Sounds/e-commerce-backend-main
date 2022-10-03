@@ -47,7 +47,7 @@ public class CartItemService {
 		target.setQuantity(cartItem.getQuantity());
         target.setProduct(cartItem.getProduct());
 		target.setId(cartItem.getId());
-		return (cartItemRepository.save(target) != null) ? true : false;
+		return cartItemRepository.save(target) != null;
     }
     public boolean delete(CartItem cartItem){
         cartItemRepository.delete(cartItem);

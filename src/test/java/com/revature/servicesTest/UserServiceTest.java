@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UserServiceTest {
+class UserServiceTest {
     @Mock
     private static UserRepository mockUserDao;
 

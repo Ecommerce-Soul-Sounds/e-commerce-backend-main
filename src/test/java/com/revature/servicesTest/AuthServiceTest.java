@@ -33,7 +33,7 @@ import com.revature.services.UserService;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AuthServiceTest {
+class AuthServiceTest {
     @Mock
 	private static UserService mockdao;
     

@@ -33,7 +33,7 @@ import com.revature.services.OrderService;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class OrderTest {
+class OrderTest {
 	@Mock
 	private static OrderRepository mockdao;
 	@InjectMocks

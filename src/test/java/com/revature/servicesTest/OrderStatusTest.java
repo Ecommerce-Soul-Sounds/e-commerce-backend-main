@@ -26,7 +26,7 @@ import com.revature.services.OrderStatusService;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class OrderStatusTest {
+class OrderStatusTest {
 	@Mock
 	private static OrderStatusRepository mockdao;
 	@InjectMocks
