@@ -138,14 +138,14 @@ public class CartController {
     }
 
     @Authorized
-    @PutMapping("/add-to-cart")
-	public ClientMessage  updateCart(@RequestParam Cart cart) {
+    @PutMapping("/update-cart")
+	public  @ResponseBody  ClientMessage  updateCart(@RequestBody Cart cart) {
 		return cartService.update(cart)  ? UPDATE_SUCCESSFUL : UPDATE_FAILED;
 	}
     
     @Authorized
-	@DeleteMapping("/remove-from-cart")
-	public ClientMessage deleteCart(@RequestParam  Cart cart) {
+	@DeleteMapping("/delete-cart")
+	public  @ResponseBody ClientMessage deleteCart(@RequestBody  Cart cart) {
 		return cartService.delete(cart) ? DELETION_SUCCESSFUL : DELETION_FAILED;
 	}
 
