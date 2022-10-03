@@ -19,5 +19,5 @@ public interface OrderRepository extends JpaRepository<CustomerOrder, Integer>  
 	List<CustomerOrder> findCustomerOrdersByStatus(int userid, int statusId);
 	
 	@Query(value="UPDATE customer_order SET status_id=?1, WHERE order_id=?2", nativeQuery=true)
-	public boolean updatestatus(int OrderStatus, int OrderId);
+	public boolean updatestatus(int orderStatus, int orderId);
 }

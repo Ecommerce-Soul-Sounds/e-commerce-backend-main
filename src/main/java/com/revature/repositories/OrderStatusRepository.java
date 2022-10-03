@@ -13,5 +13,5 @@ public interface OrderStatusRepository extends JpaRepository<OrderStatus, Intege
 	OrderStatus getOrderStatusByStatusName(String status);
 
 	@Query(value="UPDATE order_status SET status=?1, WHERE status_id=?2", nativeQuery=true)
-	public boolean updatestatus(String status, int StatusId);
+	public boolean updatestatus(String status, int statusId);
 }

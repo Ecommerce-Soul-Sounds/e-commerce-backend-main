@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import com.revature.models.Address;
-
 @Data
 @Entity
 @NoArgsConstructor

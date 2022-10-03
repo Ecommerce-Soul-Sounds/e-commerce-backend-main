@@ -42,7 +42,6 @@ public class CartItemService {
         return cartItemRepository.getById(id);
     }
     public boolean update(CartItem cartItem){
-        //return cartItemRepository.updateItem(cartItem.getQuantity(), cartItem.getId());
         CartItem target = cartItemRepository.getById(cartItem.getId());
 		target.setQuantity(cartItem.getQuantity());
         target.setProduct(cartItem.getProduct());
