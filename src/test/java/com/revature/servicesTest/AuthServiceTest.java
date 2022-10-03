@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Order;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +48,9 @@ public class AuthServiceTest {
 
     @BeforeAll
 	static void setUpBeforeClass() throws Exception{
+        mockdao = Mockito.mock(UserService.class);
+        authServ = new AuthService(mockdao);
+        
         address1= new Address(1, "line1", "line2", "city1", "state1", 123);
         address2= new Address(2, "line1", "line2", "city2", "state2", 321);
         
@@ -84,7 +87,9 @@ public class AuthServiceTest {
 	@Order(2)
 	@DisplayName("2.Find By Credentials Test")
 	void testFindByCredentials() {
-        when(authServ.findByCredentials(user1.getEmail(),user1.getPassword()).get()).thenReturn(user1);
+        Optional<User> expected = Optional.of(user1);
+
+        when(authServ.findByCredentials(expected.get().getEmail(),expected.get().getPassword())).thenReturn(expected);
         
         assertEquals(user1, authServ.findByCredentials(user1.getEmail(), user1.getPassword()).get());
 
