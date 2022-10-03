@@ -20,35 +20,38 @@ public class LoggingAspect {
 	private ObjectMapper om = new ObjectMapper();
 	
 	@Before(value="execution(* com.revature.controllers.*.*(..))")
-	public void LogBeforeController(JoinPoint jp) throws JsonProcessingException {
+	public void logBeforeController(JoinPoint jp) throws JsonProcessingException {
 		log.info(String.format("Incoming request routed to - [ %s : %s ]", jp.getTarget().getClass().getName(), jp.getSignature().getName()));
-
+<<<<<<< HEAD
+		log.info(String.format("Request body is: %s", om.writeValueAsString(jp.getArgs()[0])));
+=======
 		if (jp.getArgs().length > 0) {
 			String requestJSON = om.writeValueAsString(jp.getArgs()[0]);
-			log.info("Request body is: " + requestJSON);
+			log.info(String.format("Request body is: %s", requestJSON));
 		}
+>>>>>>> 0a3f4cd92a3136222f9a4ced8b2cb2f9d93217b8
 	}
 	
 	@AfterReturning(value="execution(* com.revature.controllers.*.*(..))", returning = "result")
-	public void LogAfterController(JoinPoint jp, Object result) {
-		log.info("sending response: " + result);
+	public void logAfterController(JoinPoint jp, Object result) {
+		log.info(String.format("sending response: %s", result));
 	}
 	
 	@Before(value="execution(* com.revature.services.*.*(..))")
-	public void LogBeforeService(JoinPoint jp) {
+	public void logBeforeService(JoinPoint jp) {
 		log.info(String.format("invoking service - [ %s : %s ]", jp.getTarget().getClass().getName(), jp.getSignature().getName()));
 	}
 	
 	@Before(value="execution(* com.revature.repositories.*.*(..))")
-	public void LogBeforeDAO(JoinPoint jp) throws JsonProcessingException {
+	public void logBeforeDAO(JoinPoint jp) throws JsonProcessingException {
 		log.debug(String.format("calling dao method - [ %s : %s ]: with args", jp.getTarget().getClass().getName(), jp.getSignature().getName()));
 		for (Object arg : jp.getArgs()) {
-			log.debug(arg.getClass().getName() + ": " + om.writeValueAsString(arg));
+			log.debug(String.format("%s : %s", arg.getClass().getName(), om.writeValueAsString(arg)));
 		}
 	}
 	
 	@AfterReturning(value="execution(* com.revature.repositories.*.*(..))", returning = "result")
-	public void LogAfterDAO(JoinPoint jp, Object result) throws JsonProcessingException {
+	public void logAfterDAO(JoinPoint jp, Object result) throws JsonProcessingException {
 		log.debug(String.format("Exiting dao method - [ %s : %s ]: returning %s", jp.getTarget().getClass().getName(), jp.getSignature().getName(), om.writeValueAsString(result)));
 	}
 }
