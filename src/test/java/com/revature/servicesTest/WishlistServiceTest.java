@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WishlistServiceTest {
+class WishlistServiceTest {
     @Mock
     private static WishlistRepository mockWishlistDao;
 

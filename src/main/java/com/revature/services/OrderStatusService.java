@@ -25,12 +25,16 @@ public class OrderStatusService {
 		return (orderid > 0) ? 1 : 0;
 	}
 
+	public OrderStatus getStatusByName(String status) {
+		return orderstatusRepository.getOrderStatusByStatusName(status);
+	}
+
 	public List<OrderStatus> findAll() {
 		return orderstatusRepository.findAll();
 	}
 
-	public boolean updatestatus(String Status, int StatusId) {
-		return orderstatusRepository.updatestatus(Status, StatusId);
+	public boolean updatestatus(String status, int statusId) {
+		return orderstatusRepository.updatestatus(status, statusId);
 	}
 
 	public boolean delete(OrderStatus orderstatus) {

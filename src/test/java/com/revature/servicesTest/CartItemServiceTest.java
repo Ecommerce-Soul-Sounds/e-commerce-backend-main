@@ -29,7 +29,7 @@ import com.revature.services.CartItemService;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CartItemServiceTest {
+class CartItemServiceTest {
     @Mock 
     private static CartItemRepository mockDao;
 
@@ -76,7 +76,7 @@ public class CartItemServiceTest {
     @Test
 	@Order(2)
 	@DisplayName("2. Create CartItem")
-	public void TestCreateCreateItem() {
+	void TestCreateCreateItem() {
 
        cartItem3 = new CartItem(3, 3, product1, cart1);
 
@@ -91,8 +91,8 @@ public class CartItemServiceTest {
 	@DisplayName("3. Get all CartItems by Id")
 	void TestfindAllByCartId() {
 
-        when(cartItemServ.findAllByCartId(cartItem1)).thenReturn(dummyDb);
-        assertEquals(dummyDb, cartItemServ.findAllByCartId(cartItem1));
+        when(cartItemServ.findAllByCart(cart1)).thenReturn(dummyDb);
+        assertEquals(dummyDb, cartItemServ.findAllByCart(cart1));
 
     }
     @Test

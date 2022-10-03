@@ -8,6 +8,10 @@ import com.revature.models.OrderStatus;
 
 @Transactional
 public interface OrderStatusRepository extends JpaRepository<OrderStatus, Integer> {
-	@Query(value="UPDATE orderstatus SET status=?1, WHERE status_id=?2", nativeQuery=true)
-	public boolean updatestatus(String status, int StatusId);
+
+	@Query(value = "SELECT * FROM order_status WHERE status =?1", nativeQuery = true)
+	OrderStatus getOrderStatusByStatusName(String status);
+
+	@Query(value="UPDATE order_status SET status=?1, WHERE status_id=?2", nativeQuery=true)
+	public boolean updatestatus(String status, int statusId);
 }
