@@ -33,8 +33,8 @@ public class OrderStatusService {
 		return orderstatusRepository.findAll();
 	}
 
-	public boolean updatestatus(String Status, int StatusId) {
-		return orderstatusRepository.updatestatus(Status, StatusId);
+	public boolean updatestatus(String status, int statusId) {
+		return orderstatusRepository.updatestatus(status, statusId);
 	}
 
 	public boolean delete(OrderStatus orderstatus) {

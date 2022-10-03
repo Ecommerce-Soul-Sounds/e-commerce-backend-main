@@ -32,7 +32,7 @@ public class UserAddressService {
         target.setZipcode(address.getId());
 		target.setId(address.getId());
 		
-        return (userAddressRepo.save(target) != null) ? true : false;
+        return userAddressRepo.save(target) != null;
     }
 
     public boolean delete(Address address){

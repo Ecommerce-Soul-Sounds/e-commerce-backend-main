@@ -39,8 +39,8 @@ public class OrderService {
 	public CustomerOrder findByOrderID(int orderId){
 		return orderRepository.findByOrderID(orderId);
 	}
-	public boolean updatestatus(OrderStatus orderStatus, CustomerOrder OrderId) {
-		return orderRepository.updatestatus(orderStatus.getId(),OrderId.getId());
+	public boolean updatestatus(OrderStatus orderStatus, CustomerOrder orderId) {
+		return orderRepository.updatestatus(orderStatus.getId(), orderId.getId());
 	}
 	public boolean delete(CustomerOrder order) {
 		orderRepository.delete(order);

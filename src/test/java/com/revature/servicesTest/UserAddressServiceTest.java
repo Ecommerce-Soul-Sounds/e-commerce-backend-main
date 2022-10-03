@@ -28,7 +28,7 @@ import com.revature.services.UserAddressService;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UserAddressServiceTest {
+class UserAddressServiceTest {
     @Mock 
     private static UserAddressRepository mockDao;
 
@@ -64,7 +64,7 @@ public class UserAddressServiceTest {
     @Test
 	@Order(2)
 	@DisplayName("2. Create Address")
-	public void TestCreateAddress() {
+	void TestCreateAddress() {
 
         address3 = new Address(2, "line3", "line3", "city3", "state3", 456);
 
