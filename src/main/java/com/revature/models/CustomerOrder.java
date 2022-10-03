@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="order")
-public class Order {
+@Table(name="customer_orders")
+public class CustomerOrder {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Order {
 	private User customer;
 	
 	@ManyToOne
-	@JoinColumn(name = "address_id", referencedColumnName = "cart_id")
+	@JoinColumn(name = "address_id", referencedColumnName = "address_id")
 	private Address address;
 	
 	@OneToOne(cascade = CascadeType.ALL)
