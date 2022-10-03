@@ -25,6 +25,10 @@ public class OrderStatusService {
 		return (orderid > 0) ? 1 : 0;
 	}
 
+	public OrderStatus getStatusByName(String status) {
+		return orderstatusRepository.getOrderStatusByStatusName(status);
+	}
+
 	public List<OrderStatus> findAll() {
 		return orderstatusRepository.findAll();
 	}

@@ -99,8 +99,8 @@ public class OrderTest {
 	@DisplayName("4. Get Order By Id")
 	void testGetOrderById() {
 
-        when(oserv.findByOrderID(1)).thenReturn(dummydb);
-        assertEquals(dummydb, oserv.findByOrderID(1));
+        when(oserv.findByOrderID(1)).thenReturn(o1);
+        assertEquals(o1, oserv.findByOrderID(1));
 
     }
 	@Test
