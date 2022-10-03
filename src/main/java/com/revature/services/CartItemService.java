@@ -2,6 +2,7 @@ package com.revature.services;
 
 import java.util.List;
 
+import com.revature.models.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +30,8 @@ public class CartItemService {
         return (id>0)?1:0;
     }
 
-    public  List<CartItem> findAllByCartId(CartItem cartItem){
-        return cartItemRepository.getAllByCartId(cartItem.getCart().getId());
+    public  List<CartItem> findAllByCart(Cart cart){
+        return cartItemRepository.getAllByCartId(cart.getId());
 
     }
 
