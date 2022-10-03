@@ -22,8 +22,10 @@ public class LoggingAspect {
 	@Before(value="execution(* com.revature.controllers.*.*(..))")
 	public void logBeforeController(JoinPoint jp) throws JsonProcessingException {
 		log.info(String.format("Incoming request routed to - [ %s : %s ]", jp.getTarget().getClass().getName(), jp.getSignature().getName()));
-		String requestJSON = om.writeValueAsString(jp.getArgs()[0]);
-		log.info(String.format("Request body is: %s", requestJSON));
+		if (jp.getArgs().length > 0) {
+			String requestJSON = om.writeValueAsString(jp.getArgs()[0]);
+			log.info(String.format("Request body is: %s", requestJSON));
+		}
 	}
 	
 	@AfterReturning(value="execution(* com.revature.controllers.*.*(..))", returning = "result")
