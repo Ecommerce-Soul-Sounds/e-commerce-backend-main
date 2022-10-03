@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.models.Cart;
 import com.revature.models.CartItem;
 import com.revature.repositories.CartItemRepository;
 

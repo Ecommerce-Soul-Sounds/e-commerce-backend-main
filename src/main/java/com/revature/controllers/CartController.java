@@ -40,18 +40,20 @@ public class CartController {
         persistentCart.setId(cart.getId());
         persistentCart.setTotalQuantity(cart.getTotalQuantity());
         persistentCart.setDateModified(cart.getDateModified());
-       
-        int code = cartService.create(persistentCart).getId() ;
-       switch (code) {
-        case 1:
-            return CREATION_SUCCESSFUL;
-        case 0:
-            return CREATION_FAILED;
-        case -1:
-            return ENTITY_ALREADY_EXISTS;
+
+        int code = cartService.create(persistentCart).getId();
+        switch (code) {
+            case 1:
+                return CREATION_SUCCESSFUL;
+            case 0:
+                return CREATION_FAILED;
+            case -1:
+                return ENTITY_ALREADY_EXISTS;
+
+            default:
+                return null;
         }
-        
-        return null;
+
     }
 
     @Authorized
@@ -61,10 +63,10 @@ public class CartController {
         if (userLoggedIn != null) {
             Cart currentUserCart = cartService.findById(userLoggedIn.getCart().getId());
             if (currentUserCart != null) {
-				return currentUserCart;
-			} else {
-				throw new CartErrorException("Cart Not Found");
-			}
+                return currentUserCart;
+            } else {
+                throw new CartErrorException("Cart Not Found");
+            }
 
         } else {
             throw new NotLoggedInException("Not logged in. Please log in first.");
@@ -75,7 +77,7 @@ public class CartController {
     @PostMapping("/add-to-cart")
     public @ResponseBody Cart addToCart(@RequestBody ProductDTO product, HttpServletRequest request) {
 
-        Product persistentProduct= new Product();
+        Product persistentProduct = new Product();
 
         persistentProduct.setId(product.getId());
         persistentProduct.setQuantity(product.getQuantity());
@@ -88,93 +90,88 @@ public class CartController {
 
         User userLoggedIn = (User) request.getSession().getAttribute("loggedInUser");
 
-        if (userLoggedIn != null) {
-            Cart currentUserCart = cartService.findById(userLoggedIn.getCart().getId());
-            if (currentUserCart != null) {
-                int currentCartQuantity = currentUserCart.getTotalQuantity();
-                List<CartItem> cartItemList = cartItemService.getCartItems(currentUserCart);
+        Cart currentUserCart = cartService.findById(userLoggedIn.getCart().getId());
+        if (currentUserCart != null) {
+            int currentCartQuantity = currentUserCart.getTotalQuantity();
+            List<CartItem> cartItemList = cartItemService.getCartItems(currentUserCart);
 
-                boolean contains = false;
-                int currQuantity = 0;
-                int currentCartItemsCount = cartItemList.size();
-                CartItem prevCartItem = new CartItem();
-                for (CartItem item : cartItemList) {
+            boolean contains = false;
+            int currQuantity = 0;
+            int currentCartItemsCount = cartItemList.size();
+            CartItem prevCartItem = new CartItem();
+            for (CartItem item : cartItemList) {
 
-                    if (item.getProduct().getId() == product.getId()) {
+                if (item.getProduct().getId() == product.getId()) {
 
-                        contains = true;
-                        currQuantity = item.getQuantity();
-                        prevCartItem = item;
-                        break;
-                    }
-                }
-
-                if (contains) {
-                    prevCartItem.setCart(currentUserCart);
-                    prevCartItem.setQuantity(currQuantity + 1);
-                    cartItemService.update(prevCartItem);
-                } else {
-                    CartItem cartItem = new CartItem();
-                    cartItem.setCart(currentUserCart);
-
-                    cartItem.setQuantity(currentCartItemsCount + 1);
-                    cartItem.setProduct(persistentProduct);
-
-                    cartItemService.create(cartItem);
-                }
-                currentUserCart.setDateModified(LocalDate.now());
-                currentUserCart.setTotalQuantity(currentCartQuantity + 1);
-                cartService.update(currentUserCart);
-
-                return currentUserCart;
-            } else {
-                Cart cart = new Cart();
-                cart.setDateModified(LocalDate.now());
-                cart.setTotalQuantity(1);
-
-                Cart newCart = cartService.create(cart);
-
-                if (newCart != null) {
-                    CartItem cartItem = new CartItem();
-                    cartItem.setCart(newCart);
-                    cartItem.setQuantity(1);
-                    cartItem.setProduct(persistentProduct);
-
-                    if (cartItemService.create(cartItem) != 0) {
-                        newCart.setTotalQuantity(1);
-                        return newCart;
-                    } else {
-                        throw new CartErrorException("Item could not be added to cart. Please try again");
-                    }
-                } else {
-                    throw new CartErrorException("Item could not be added to cart. Please try again");
+                    contains = true;
+                    currQuantity = item.getQuantity();
+                    prevCartItem = item;
+                    break;
                 }
             }
 
+            if (contains) {
+                prevCartItem.setCart(currentUserCart);
+                prevCartItem.setQuantity(currQuantity + 1);
+                cartItemService.update(prevCartItem);
+            } else {
+                CartItem cartItem = new CartItem();
+                cartItem.setCart(currentUserCart);
+
+                cartItem.setQuantity(currentCartItemsCount + 1);
+                cartItem.setProduct(persistentProduct);
+
+                cartItemService.create(cartItem);
+            }
+            currentUserCart.setDateModified(LocalDate.now());
+            currentUserCart.setTotalQuantity(currentCartQuantity + 1);
+            cartService.update(currentUserCart);
+
+            return currentUserCart;
         } else {
-            throw new NotLoggedInException("Not logged in. Please log in first.");
+            Cart cart = new Cart();
+            cart.setDateModified(LocalDate.now());
+            cart.setTotalQuantity(1);
+
+            Cart newCart = cartService.create(cart);
+
+            if (newCart != null) {
+                CartItem cartItem = new CartItem();
+                cartItem.setCart(newCart);
+                cartItem.setQuantity(1);
+                cartItem.setProduct(persistentProduct);
+
+                if (cartItemService.create(cartItem) != 0) {
+                    newCart.setTotalQuantity(1);
+                    return newCart;
+                } else {
+                    throw new CartErrorException("Item could not be added to cart. Please try again");
+                }
+            } else {
+                throw new CartErrorException("Item could not be added to cart. Please try again");
+            }
         }
     }
 
     @Authorized
     @PutMapping("/update-cart")
-	public  @ResponseBody  ClientMessage  updateCart(@RequestBody CartDTO cart) {
+    public @ResponseBody ClientMessage updateCart(@RequestBody CartDTO cart) {
         Cart persistentCart = new Cart();
         persistentCart.setId(cart.getId());
         persistentCart.setTotalQuantity(cart.getTotalQuantity());
         persistentCart.setDateModified(cart.getDateModified());
-        
-		return cartService.update(persistentCart)  ? UPDATE_SUCCESSFUL : UPDATE_FAILED;
-	}
-    
+
+        return cartService.update(persistentCart) ? UPDATE_SUCCESSFUL : UPDATE_FAILED;
+    }
+
     @Authorized
-	@DeleteMapping("/delete-cart")
-	public  @ResponseBody ClientMessage deleteCart(@RequestBody  CartDTO cart) {
+    @DeleteMapping("/delete-cart")
+    public @ResponseBody ClientMessage deleteCart(@RequestBody CartDTO cart) {
         Cart persistentCart = new Cart();
         persistentCart.setId(cart.getId());
         persistentCart.setTotalQuantity(cart.getTotalQuantity());
         persistentCart.setDateModified(cart.getDateModified());
-		return cartService.delete(persistentCart) ? DELETION_SUCCESSFUL : DELETION_FAILED;
-	}
+        return cartService.delete(persistentCart) ? DELETION_SUCCESSFUL : DELETION_FAILED;
+    }
 
 }
