@@ -41,10 +41,10 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
     
-    private byte picture;
+    private byte[] picture;
     
-    @ManyToOne
-    @JoinColumn(name="address_id", referencedColumnName = "address_id")
+    @OneToOne
+    @JoinColumn(name="address_id", referencedColumnName="address_id")
     private Address address;
     
     @OneToOne

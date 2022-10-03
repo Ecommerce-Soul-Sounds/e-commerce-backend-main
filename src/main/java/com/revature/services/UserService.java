@@ -22,4 +22,23 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    public User getUserById(int id) {
+        return userRepository.findUserById(id);
+    }
+
+    public int updateUser(User user) {
+        return userRepository.updateUser(user.getFirstName(), user.getLastName(),
+                                        user.getEmail(), user.getPassword(), user.getPicture(),
+                                        user.getAddress().getId(), user.getWishlist().getId(),
+                                        user.getCart().getId(), user.getId());
+    }
+
+    public int updateUserCart(User user) {
+        return userRepository.updateUserCart(user.getId(), user.getCart().getId());
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 }
