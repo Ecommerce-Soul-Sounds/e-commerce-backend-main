@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.revature.annotations.Authorized;
+import com.revature.dtos.CartDTO;
+import com.revature.dtos.ProductDTO;
 import com.revature.exceptions.CartErrorException;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.Cart;
@@ -33,8 +35,13 @@ public class CartController {
 
     @Authorized
     @PostMapping("/create-cart")
-    public @ResponseBody ClientMessage createCart(@RequestBody Cart cart) {
-       int code = cartService.create(cart).getId() ;
+    public @ResponseBody ClientMessage createCart(@RequestBody CartDTO cart) {
+        Cart persistentCart = new Cart();
+        persistentCart.setId(cart.getId());
+        persistentCart.setTotalQuantity(cart.getTotalQuantity());
+        persistentCart.setDateModified(cart.getDateModified());
+       
+        int code = cartService.create(persistentCart).getId() ;
        switch (code) {
         case 1:
             return CREATION_SUCCESSFUL;
@@ -66,7 +73,19 @@ public class CartController {
 
     @Authorized
     @PostMapping("/add-to-cart")
-    public @ResponseBody Cart addToCart(@RequestBody Product product, HttpServletRequest request) {
+    public @ResponseBody Cart addToCart(@RequestBody ProductDTO product, HttpServletRequest request) {
+
+        Product persistentProduct= new Product();
+
+        persistentProduct.setId(product.getId());
+        persistentProduct.setQuantity(product.getQuantity());
+        persistentProduct.setPrice(product.getPrice());
+        persistentProduct.setCategory(product.getCategory());
+        persistentProduct.setBrand(product.getBrand());
+        persistentProduct.setDescription(product.getDescription());
+        persistentProduct.setImage(product.getImage());
+        persistentProduct.setName(product.getName());
+
         User userLoggedIn = (User) request.getSession().getAttribute("loggedInUser");
 
         if (userLoggedIn != null) {
@@ -99,7 +118,7 @@ public class CartController {
                     cartItem.setCart(currentUserCart);
 
                     cartItem.setQuantity(currentCartItemsCount + 1);
-                    cartItem.setProduct(product);
+                    cartItem.setProduct(persistentProduct);
 
                     cartItemService.create(cartItem);
                 }
@@ -119,7 +138,7 @@ public class CartController {
                     CartItem cartItem = new CartItem();
                     cartItem.setCart(newCart);
                     cartItem.setQuantity(1);
-                    cartItem.setProduct(product);
+                    cartItem.setProduct(persistentProduct);
 
                     if (cartItemService.create(cartItem) != 0) {
                         newCart.setTotalQuantity(1);
@@ -139,14 +158,23 @@ public class CartController {
 
     @Authorized
     @PutMapping("/update-cart")
-	public  @ResponseBody  ClientMessage  updateCart(@RequestBody Cart cart) {
-		return cartService.update(cart)  ? UPDATE_SUCCESSFUL : UPDATE_FAILED;
+	public  @ResponseBody  ClientMessage  updateCart(@RequestBody CartDTO cart) {
+        Cart persistentCart = new Cart();
+        persistentCart.setId(cart.getId());
+        persistentCart.setTotalQuantity(cart.getTotalQuantity());
+        persistentCart.setDateModified(cart.getDateModified());
+        
+		return cartService.update(persistentCart)  ? UPDATE_SUCCESSFUL : UPDATE_FAILED;
 	}
     
     @Authorized
 	@DeleteMapping("/delete-cart")
-	public  @ResponseBody ClientMessage deleteCart(@RequestBody  Cart cart) {
-		return cartService.delete(cart) ? DELETION_SUCCESSFUL : DELETION_FAILED;
+	public  @ResponseBody ClientMessage deleteCart(@RequestBody  CartDTO cart) {
+        Cart persistentCart = new Cart();
+        persistentCart.setId(cart.getId());
+        persistentCart.setTotalQuantity(cart.getTotalQuantity());
+        persistentCart.setDateModified(cart.getDateModified());
+		return cartService.delete(persistentCart) ? DELETION_SUCCESSFUL : DELETION_FAILED;
 	}
 
 }
