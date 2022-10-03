@@ -3,6 +3,7 @@ package com.revature.controllers;
 import com.revature.annotations.Authorized;
 import com.revature.models.User;
 import com.revature.services.UserService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,17 +28,15 @@ public class UserController {
         /* This is retrieving the submitted profile picture and setting it as a byte array to the User model */
         Part filePart = request.getPart("picture");
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        if (fileName != null && !fileName.isBlank()) {
+        if (fileName != null) {
             byte[] bytes;
 
             InputStream fileContent = filePart.getInputStream();
-            bytes = fileContent.readAllBytes();
+
+            bytes = IOUtils.toByteArray(fileContent);
 
             user.setPicture(bytes);
         }
-
-
-
 
         if (userService.updateUser(user) > 0) {
             return "User updated successfully.";

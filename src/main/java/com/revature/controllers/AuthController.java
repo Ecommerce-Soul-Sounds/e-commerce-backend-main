@@ -2,8 +2,13 @@ package com.revature.controllers;
 
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
+import com.revature.models.Cart;
 import com.revature.models.User;
+import com.revature.models.Wishlist;
 import com.revature.services.AuthService;
+import com.revature.services.CartService;
+import com.revature.services.WishlistService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +23,15 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private WishlistService wishlistService;
+
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
@@ -50,6 +61,8 @@ public class AuthController {
         createdUser.setPassword(registerRequest.getPassword());
         createdUser.setFirstName(registerRequest.getFirstName());
         createdUser.setLastName(registerRequest.getLastName());
+        createdUser.setCart(cartService.create(new Cart()));
+        createdUser.setWishlist(wishlistService.addWishlist(new Wishlist()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(createdUser));
     }
