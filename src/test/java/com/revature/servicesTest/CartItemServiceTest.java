@@ -91,8 +91,8 @@ public class CartItemServiceTest {
 	@DisplayName("3. Get all CartItems by Id")
 	void TestfindAllByCartId() {
 
-        when(cartItemServ.findAllByCartId(cartItem1)).thenReturn(dummyDb);
-        assertEquals(dummyDb, cartItemServ.findAllByCartId(cartItem1));
+        when(cartItemServ.findAllByCart(cart1)).thenReturn(dummyDb);
+        assertEquals(dummyDb, cartItemServ.findAllByCart(cart1));
 
     }
     @Test
