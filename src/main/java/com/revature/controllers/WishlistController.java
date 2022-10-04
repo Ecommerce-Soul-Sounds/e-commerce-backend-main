@@ -3,13 +3,11 @@ package com.revature.controllers;
 import com.revature.annotations.Authorized;
 import com.revature.exceptions.NoProductFoundException;
 import com.revature.exceptions.WishlistErrorException;
-import com.revature.models.Product;
-import com.revature.models.User;
-import com.revature.models.Wishlist;
-import com.revature.models.WishlistItem;
+import com.revature.models.*;
 import com.revature.services.ProductService;
 import com.revature.services.WishlistItemService;
 import com.revature.services.WishlistService;
+import com.revature.util.ClientMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,7 +66,7 @@ public class WishlistController {
 
     @Authorized
     @DeleteMapping("/delete-item")
-    public @ResponseBody String deleteWishlistItem(@RequestBody int productId, HttpServletRequest request) {
+    public @ResponseBody ClientMessage deleteWishlistItem(@RequestBody int productId, HttpServletRequest request) {
         User loggedInUser = (User) request.getSession().getAttribute("user");
 
         WishlistItem item = new WishlistItem();
@@ -80,7 +78,7 @@ public class WishlistController {
             item.setProduct(optional.get());
             wishlistItemService.deleteWishlistItem(item);
             wishlistService.updateWishlist(loggedInUser.getWishlist());
-            return "Item successfully removed from your wishlist.";
+            return ClientMessageUtil.WISHLIST_ITEM_DELETION_SUCCESSFUL;
         } else {
             throw new NoProductFoundException("Product with that ID was not found.");
         }

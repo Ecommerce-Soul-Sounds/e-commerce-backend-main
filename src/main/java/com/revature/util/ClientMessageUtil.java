@@ -15,5 +15,6 @@ public class ClientMessageUtil {
 	public static final ClientMessage DELETION_FAILED = new ClientMessage("SOMETHING WENT WRONG DURING DELETION");
 	public static final ClientMessage ENTITY_ALREADY_EXISTS = new ClientMessage("AN ENTITY MATCHING THIS ONE ALREADY EXISTS.");
 	public static final ClientMessage EMAIL_ALREADY_EXISTS = new ClientMessage("THAT EMAIL IS ALREADY TAKEN");
+	public static final ClientMessage WISHLIST_ITEM_DELETION_SUCCESSFUL = new ClientMessage("ITEM SUCCESSFULLY REMOVED FROM YOUR WISHLIST");
 
 }

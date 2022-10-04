@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 public class LoggingAspect {
@@ -23,8 +25,10 @@ public class LoggingAspect {
 	public void logBeforeController(JoinPoint jp) throws JsonProcessingException {
 		log.info("Incoming request routed to - [ {} : {} ]", jp.getTarget().getClass().getName(), jp.getSignature().getName());
 		if (jp.getArgs().length > 0) {
-			String requestJSON = om.writeValueAsString(jp.getArgs()[0]);
-			log.info("Request body is: {}", requestJSON);
+			if (!(jp.getArgs()[0] instanceof org.apache.catalina.session.StandardSessionFacade)) {
+				String requestJSON = om.writeValueAsString(jp.getArgs()[0]);
+				log.info("Request body is: {}", requestJSON);
+			}
 		}
 	}
 	
@@ -42,12 +46,14 @@ public class LoggingAspect {
 	public void logBeforeDAO(JoinPoint jp) throws JsonProcessingException {
 		log.debug("calling dao method - [ {} : {} ]: with args", jp.getTarget().getClass().getName(), jp.getSignature().getName());
 		for (Object arg : jp.getArgs()) {
-			log.debug("{} : {}", arg.getClass().getName(), om.writeValueAsString(arg));
+			//log.debug("{} : {}", arg.getClass().getName(), om.writeValueAsString(arg));
+			//log.debug("{}", arg.getClass().getName());
 		}
 	}
 	
 	@AfterReturning(value="execution(* com.revature.repositories.*.*(..))", returning = "result")
 	public void logAfterDAO(JoinPoint jp, Object result) throws JsonProcessingException {
-		log.debug("Exiting dao method - [ {} : {} ]: returning {}", jp.getTarget().getClass().getName(), jp.getSignature().getName(), om.writeValueAsString(result));
+		//log.debug("Exiting dao method - [ {} : {} ]: returning {}", jp.getTarget().getClass().getName(), jp.getSignature().getName(), om.writeValueAsString(result));
+		log.debug("Exiting dao method - [ {} : {} ]", jp.getTarget().getClass().getName(), jp.getSignature().getName());
 	}
 }
