@@ -3,11 +3,13 @@ package com.revature.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
+public class UpdateUserRequestInfo {
+
     private String email;
     private String password;
     private String firstName;
@@ -17,4 +19,5 @@ public class RegisterRequest {
     private String city;
     private String state;
     private int zipcode;
+    private MultipartFile picture;
 }
