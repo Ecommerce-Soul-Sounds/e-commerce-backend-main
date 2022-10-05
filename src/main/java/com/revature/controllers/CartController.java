@@ -2,64 +2,47 @@ package com.revature.controllers;
 
 import static com.revature.util.ClientMessageUtil.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.revature.annotations.Authorized;
 import com.revature.dtos.CartDTO;
-import com.revature.dtos.ProductDTO;
 import com.revature.exceptions.CartErrorException;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.Cart;
 import com.revature.models.CartItem;
 import com.revature.models.ClientMessage;
-import com.revature.models.Product;
 import com.revature.models.User;
-import com.revature.services.CartItemService;
 import com.revature.services.CartService;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("api/cart")
 @CrossOrigin(origins = { "http://localhost:4200", "http://localhost:3000" }, allowCredentials = "true")
 public class CartController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private CartItemService cartItemService;
-
     @Authorized
     @PostMapping("/create-cart")
-    public @ResponseBody ClientMessage createCart(@RequestBody CartDTO cart) {
+    public @ResponseBody Cart createCart(@RequestBody CartDTO cart) {
         Cart persistentCart = new Cart();
         persistentCart.setId(cart.getId());
         persistentCart.setTotalQuantity(cart.getTotalQuantity());
         persistentCart.setDateModified(cart.getDateModified());
 
-        int code = cartService.create(persistentCart).getId();
-        switch (code) {
-            case 1:
-                return CREATION_SUCCESSFUL;
-            case 0:
-                return CREATION_FAILED;
-            case -1:
-                return ENTITY_ALREADY_EXISTS;
-
-            default:
-                return null;
-        }
+        return cartService.create(persistentCart);
 
     }
 
     @Authorized
     @GetMapping("/get-cart")
-    public @ResponseBody Cart getCart(HttpServletRequest request) {
-        User userLoggedIn = (User) request.getSession().getAttribute("loggedInUser");
+    public @ResponseBody Cart getCart(HttpSession session) {
+        User userLoggedIn = (User) session.getAttribute("user");
+
         if (userLoggedIn != null) {
             Cart currentUserCart = cartService.findById(userLoggedIn.getCart().getId());
             if (currentUserCart != null) {
@@ -70,86 +53,6 @@ public class CartController {
 
         } else {
             throw new NotLoggedInException("Not logged in. Please log in first.");
-        }
-    }
-
-    @Authorized
-    @PostMapping("/add-to-cart")
-    public @ResponseBody Cart addToCart(@RequestBody ProductDTO product, HttpServletRequest request) {
-
-        Product persistentProduct = new Product();
-
-        persistentProduct.setId(product.getId());
-        persistentProduct.setQuantity(product.getQuantity());
-        persistentProduct.setPrice(product.getPrice());
-        persistentProduct.setCategory(product.getCategory());
-        persistentProduct.setBrand(product.getBrand());
-        persistentProduct.setDescription(product.getDescription());
-        persistentProduct.setImage(product.getImage());
-        persistentProduct.setName(product.getName());
-
-        User userLoggedIn = (User) request.getSession().getAttribute("loggedInUser");
-
-        Cart currentUserCart = cartService.findById(userLoggedIn.getCart().getId());
-        if (currentUserCart != null) {
-            int currentCartQuantity = currentUserCart.getTotalQuantity();
-            List<CartItem> cartItemList = cartItemService.getCartItems(currentUserCart);
-
-            boolean contains = false;
-            int currQuantity = 0;
-            int currentCartItemsCount = cartItemList.size();
-            CartItem prevCartItem = new CartItem();
-            for (CartItem item : cartItemList) {
-
-                if (item.getProduct().getId() == product.getId()) {
-
-                    contains = true;
-                    currQuantity = item.getQuantity();
-                    prevCartItem = item;
-                    break;
-                }
-            }
-
-            if (contains) {
-                prevCartItem.setCart(currentUserCart);
-                prevCartItem.setQuantity(currQuantity + 1);
-                cartItemService.update(prevCartItem);
-            } else {
-                CartItem cartItem = new CartItem();
-                cartItem.setCart(currentUserCart);
-
-                cartItem.setQuantity(currentCartItemsCount + 1);
-                cartItem.setProduct(persistentProduct);
-
-                cartItemService.create(cartItem);
-            }
-            currentUserCart.setDateModified(LocalDate.now());
-            currentUserCart.setTotalQuantity(currentCartQuantity + 1);
-            cartService.update(currentUserCart);
-
-            return currentUserCart;
-        } else {
-            Cart cart = new Cart();
-            cart.setDateModified(LocalDate.now());
-            cart.setTotalQuantity(1);
-
-            Cart newCart = cartService.create(cart);
-
-            if (newCart != null) {
-                CartItem cartItem = new CartItem();
-                cartItem.setCart(newCart);
-                cartItem.setQuantity(1);
-                cartItem.setProduct(persistentProduct);
-
-                if (cartItemService.create(cartItem) != 0) {
-                    newCart.setTotalQuantity(1);
-                    return newCart;
-                } else {
-                    throw new CartErrorException("Item could not be added to cart. Please try again");
-                }
-            } else {
-                throw new CartErrorException("Item could not be added to cart. Please try again");
-            }
         }
     }
 
@@ -172,6 +75,31 @@ public class CartController {
         persistentCart.setTotalQuantity(cart.getTotalQuantity());
         persistentCart.setDateModified(cart.getDateModified());
         return cartService.delete(persistentCart) ? DELETION_SUCCESSFUL : DELETION_FAILED;
+    }
+
+    @Authorized
+    @PostMapping("/add-item")
+    public @ResponseBody String addCartItem(@RequestBody int productId, HttpSession session) {
+        User userLoggedIn = (User) session.getAttribute("user");
+        cartService.update(userLoggedIn.getCart());
+        boolean success = cartService.addCartItem(userLoggedIn.getCart(), productId);
+        return success ? "Item added to Cart" : "Something went wrong, item was not added to Cart.";
+    }
+
+    @Authorized
+    @DeleteMapping("/delete-item")
+    public @ResponseBody String deleteCartItem(@RequestBody int productId, HttpSession session) {
+        User userLoggedIn = (User) session.getAttribute("user");
+        boolean success = cartService.deleteCartItem(userLoggedIn.getCart(), productId);
+        return success ? "Item successfully removed from your Cart."
+                : "Something went wrong, item could not be removed.";
+    }
+
+    @Authorized
+    @GetMapping("/items")
+    public @ResponseBody List<CartItem> getCartItems(HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        return cartService.getCartItemsByCartId(loggedInUser.getCart().getId());
     }
 
 }
