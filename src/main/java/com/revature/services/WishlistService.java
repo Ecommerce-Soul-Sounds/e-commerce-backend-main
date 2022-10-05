@@ -41,8 +41,8 @@ public class WishlistService {
         wishlistRepo.delete(wishlist);
     }
 
-	public List<WishlistItem> getWishlistItemsByWishlistID(int id) {
-		return wishlistItemRepo.getWishlistItemsByWishlistID(id);
+	public List<WishlistItem> getWishlistItemsByWishlist(Wishlist wishlist) {
+		return wishlistItemRepo.getWishlistItemsByWishlistID(wishlist.getId());
 	}
 
 	public boolean addWishlistItem(Wishlist wishlist, int productId) {

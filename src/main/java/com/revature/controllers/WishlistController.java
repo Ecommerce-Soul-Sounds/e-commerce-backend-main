@@ -32,7 +32,7 @@ public class WishlistController {
 	@GetMapping("/items")
 	public @ResponseBody List<WishlistItem> getWishlistItems(HttpSession session) {
 		User loggedInUser = (User) session.getAttribute("user");
-		return wishlistService.getWishlistItemsByWishlistID(loggedInUser.getWishlist().getId());
+		return wishlistService.getWishlistItemsByWishlist(loggedInUser.getWishlist());
 	}
 
 	@Authorized

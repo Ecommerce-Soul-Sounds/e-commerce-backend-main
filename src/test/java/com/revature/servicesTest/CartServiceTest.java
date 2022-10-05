@@ -1,7 +1,6 @@
 package com.revature.servicesTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Order;
 
@@ -36,10 +35,10 @@ import com.revature.services.CartService;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CartServiceTest {
     @Mock 
-    private static CartRepository mockDao1;
+    private static CartRepository mockcart;
     @Mock 
-    private static CartItemRepository mockDao2;
-    @Mock
+    private static CartItemRepository mockcartitem;
+    @Mock 
     private static ProductRepository mockProductDao;
 
     @InjectMocks
@@ -53,9 +52,9 @@ class CartServiceTest {
 
     @BeforeAll
 	static void setUpBeforeClass() throws Exception{
-        mockDao1 = Mockito.mock(CartRepository.class);
-        mockDao2 = Mockito.mock(CartItemRepository.class);
-        cartServ = new CartService(mockDao1,mockDao2);
+        mockcart = Mockito.mock(CartRepository.class);
+        mockcartitem=Mockito.mock(CartItemRepository.class);
+        cartServ = new CartService(mockcart,mockcartitem);
 
         cart1 = new Cart(1, LocalDate.now(), 1);
         cart2 = new Cart(2,LocalDate.now(), 2);
@@ -85,7 +84,8 @@ class CartServiceTest {
 	@Order(1)
 	@DisplayName("1. Mock Validation Sanity Test")
 	void checkMockInjection() {
-		assertThat(mockDao1).isNotNull();
+		assertThat(mockcart).isNotNull();
+		assertThat(mockcartitem).isNotNull();
 		assertThat(cartServ).isNotNull();
     }
 
@@ -96,7 +96,7 @@ class CartServiceTest {
 
         cart3 = new Cart(3,LocalDate.now(), 3);
 
-		when(mockDao1.save(cart3)).thenReturn(cart3);
+		when(mockcart.save(cart3)).thenReturn(cart3);
 
 		assertEquals(cart3, cartServ.create(cart3));
 	
@@ -129,7 +129,7 @@ class CartServiceTest {
         cart1.setTotalQuantity(4);
 
         when(cartServ.findById(cart1.getId())).thenReturn(cart1);
-		when(mockDao1.save(cart1)).thenReturn(cart1);
+		when(mockcart.save(cart1)).thenReturn(cart1);
 		
 		assertEquals(true, cartServ.update(cart1));
 
@@ -139,7 +139,7 @@ class CartServiceTest {
 	@Order(6)
 	@DisplayName("6. Delete Cart")
 	void TestDeleteCart() {
-        doNothing().when(mockDao1).delete(cart1);
+        doNothing().when(mockcart).delete(cart1);
         //act + assert step
         assertEquals(true, cartServ.delete(cart1));
         
@@ -150,7 +150,7 @@ class CartServiceTest {
     @DisplayName("7. Test get cart items by Cart id")
     void TestGetCartItemsByCartId() {
         
-        when(mockDao2.getCartItemsByCartId(cartItem1.getCart().getId())).thenReturn(dummyDb2);
+        when(mockcartitem.getCartItemsByCartId(cartItem1.getCart().getId())).thenReturn(dummyDb2);
 
         assertEquals(dummyDb2, cartServ.getCartItemsByCartId(1));
     }
@@ -162,7 +162,7 @@ class CartServiceTest {
         CartItem item = new CartItem();
     	item.setCart(cart1);
     	item.setProduct(product1);
-        when(mockDao2.save(item)).thenReturn(cartItem1);
+        when(mockcartitem.save(item)).thenReturn(cartItem1);
     	when(mockProductDao.findById(1)).thenReturn(Optional.of(product1));
 
         assertEquals(true, cartServ.addCartItem(cart1, 1));
