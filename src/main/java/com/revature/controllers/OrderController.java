@@ -21,17 +21,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private OrderStatusService orderStatusService;
-
-    @Autowired
-    private CartService cartService;
-
-    @Autowired
-    private CartItemService cartItemService;
-
-    @Autowired
-    private UserService userService;
 
     // get all orders belonging to currently logged in user. Can be filtered by status depending on provided status param
     @Authorized
@@ -39,7 +28,7 @@ public class OrderController {
     public @ResponseBody List<CustomerOrder> getCustomerOrders(@RequestParam(required = false) String status, HttpServletRequest request) {
         User loggedInUser = (User) request.getSession().getAttribute("user");
         if (status != null) {
-            return orderService.getCustomerOrdersByStatus(loggedInUser, orderStatusService.getStatusByName(status));
+            return orderService.getCustomerOrdersByStatus(loggedInUser, orderService.getStatusByName(status));
         } else {
             return orderService.getAllCustomerOrders(loggedInUser);
         }
@@ -52,7 +41,7 @@ public class OrderController {
     public @ResponseBody String purchase(HttpServletRequest request) {
         User loggedInUser = (User) request.getSession().getAttribute("user");
 
-        List<CartItem> items = cartItemService.findAllByCart(loggedInUser.getCart());
+        List<CartItem> items = orderService.findAllByCart(loggedInUser.getCart());
         double totalQuantity = 0;
         for (CartItem cartItem : items) {
             totalQuantity += cartItem.getProduct().getPrice();
@@ -65,14 +54,14 @@ public class OrderController {
         order.setTotal(totalQuantity);
 
         order.setOrderPlacedDate(LocalDate.now());
-        order.setStatus(orderStatusService.getStatusByName("pending"));
+        order.setStatus(orderService.getStatusByName("pending"));
 
         if (orderService.create(order) > 0) {
             // Create and assign a new Cart to the User
-            Cart newCart = cartService.create(new Cart());
+            Cart newCart = orderService.createcart(new Cart());
             loggedInUser.setCart(newCart);
             // update new User cart in DB
-            userService.updateUserCart(loggedInUser);
+            orderService.updateUserCart(loggedInUser);
 
 
             return "Order placed successfully.";
