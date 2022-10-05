@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.revature.models.Cart;
+import com.revature.repositories.CartItemRepository;
 import com.revature.repositories.CartRepository;
 import com.revature.services.CartService;
 
@@ -30,7 +31,8 @@ import com.revature.services.CartService;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CartServiceTest {
     @Mock 
-    private static CartRepository mockDao;
+    private static CartRepository mockcart;
+    private static CartItemRepository mockcartitem;
 
     @InjectMocks
 	private static CartService cartServ;
@@ -40,8 +42,9 @@ class CartServiceTest {
 
     @BeforeAll
 	static void setUpBeforeClass() throws Exception{
-        mockDao = Mockito.mock(CartRepository.class);
-        cartServ = new CartService(mockDao);
+        mockcart = Mockito.mock(CartRepository.class);
+        mockcartitem=Mockito.mock(CartItemRepository.class);
+        cartServ = new CartService(mockcart,mockcartitem);
 
         cart1 = new Cart(1, LocalDate.now(), 1);
         cart2 = new Cart(2,LocalDate.now(), 2);
@@ -57,7 +60,8 @@ class CartServiceTest {
 	@Order(1)
 	@DisplayName("1. Mock Validation Sanity Test")
 	void checkMockInjection() {
-		assertThat(mockDao).isNotNull();
+		assertThat(mockcart).isNotNull();
+		assertThat(mockcartitem).isNotNull();
 		assertThat(cartServ).isNotNull();
     }
 
@@ -68,7 +72,7 @@ class CartServiceTest {
 
         cart3 = new Cart(3,LocalDate.now(), 3);
 
-		when(mockDao.save(cart3)).thenReturn(cart3);
+		when(mockcart.save(cart3)).thenReturn(cart3);
 
 		assertEquals(cart3, cartServ.create(cart3));
 	
@@ -101,7 +105,7 @@ class CartServiceTest {
         cart1.setTotalQuantity(4);
 
         when(cartServ.findById(cart1.getId())).thenReturn(cart1);
-		when(mockDao.save(cart1)).thenReturn(cart1);
+		when(mockcart.save(cart1)).thenReturn(cart1);
 		
 		assertEquals(true, cartServ.update(cart1));
 
@@ -111,7 +115,7 @@ class CartServiceTest {
 	@Order(6)
 	@DisplayName("6. Delete Cart")
 	void TestDeleteCart() {
-        doNothing().when(mockDao).delete(cart1);
+        doNothing().when(mockcart).delete(cart1);
         //act + assert step
         assertEquals(true, cartServ.delete(cart1));
         

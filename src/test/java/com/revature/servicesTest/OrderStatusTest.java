@@ -86,8 +86,20 @@ class OrderStatusTest {
     }
 	@Test
 	@Order(5)
-	@DisplayName("5. Delete OrderStatus")
-		void testDeleteJobListing() {
+	@DisplayName("5. Get Order Status By Status Name")
+	void testgetOrderStatusByName() {
+
+        when(osserv.getStatusByName("In-Review")).thenReturn(os1);
+		//when(mockdao.save(o1)).thenReturn(o1);
+		
+		assertEquals(os1, osserv.getStatusByName("In-Review"));
+
+    }
+	
+	@Test
+	@Order(6)
+	@DisplayName("6. Delete OrderStatus")
+		void testDeleteOrderStatus() {
 	        doNothing().when(mockdao).delete(os1);
 			//act + assert step
 			assertEquals(true, osserv.delete(os1));

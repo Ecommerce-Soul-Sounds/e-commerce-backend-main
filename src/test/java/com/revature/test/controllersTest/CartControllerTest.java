@@ -47,7 +47,6 @@ import com.revature.models.Cart;
 import com.revature.models.CartItem;
 import com.revature.models.Product;
 import com.revature.models.User;
-import com.revature.services.CartItemService;
 import com.revature.services.CartService;
 
 @ExtendWith(SpringExtension.class)
@@ -72,8 +71,6 @@ public class CartControllerTest {
     @Autowired
     private MockMvc mockmvc;
 
-    @MockBean
-    private CartItemService cartItemService;
     @MockBean
     private CartService cartService;
 
