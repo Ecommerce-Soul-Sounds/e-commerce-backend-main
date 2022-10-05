@@ -52,7 +52,7 @@ public class OrderService {
 	}
 
 	public List<CartItem> findAllByCart(Cart cart) {
-		return cartitemrepository.getAllByCartId(cart.getId());
+		return cartitemrepository.getCartItemsByCartId(cart.getId());
 
 	}
 
