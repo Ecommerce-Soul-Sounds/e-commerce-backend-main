@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+      - branch-test
+      - BruceBranch
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
