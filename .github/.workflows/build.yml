@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - branch-*
+      - branch-test
       - BruceBranch
   pull_request:
     types: [opened, synchronize, reopened]
