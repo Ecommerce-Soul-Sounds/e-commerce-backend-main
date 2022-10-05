@@ -83,21 +83,21 @@ public class CartController {
         User userLoggedIn = (User) session.getAttribute("user");
         cartService.update(userLoggedIn.getCart());
         boolean success = cartService.addCartItem(userLoggedIn.getCart(), productId);
-        return success ? "Item added to wishlist" : "Something went wrong, item was not added to wishlist.";
+        return success ? "Item added to Cart" : "Something went wrong, item was not added to Cart.";
     }
 
     @Authorized
     @DeleteMapping("/delete-item")
-    public @ResponseBody String deleteWishlistItem(@RequestBody int productId, HttpSession session) {
+    public @ResponseBody String deleteCartItem(@RequestBody int productId, HttpSession session) {
         User userLoggedIn = (User) session.getAttribute("user");
         boolean success = cartService.deleteCartItem(userLoggedIn.getCart(), productId);
-        return success ? "Item successfully removed from your wishlist."
+        return success ? "Item successfully removed from your Cart."
                 : "Something went wrong, item could not be removed.";
     }
 
     @Authorized
     @GetMapping("/items")
-    public @ResponseBody List<CartItem> getWishlistItems(HttpSession session) {
+    public @ResponseBody List<CartItem> getCartItems(HttpSession session) {
         User loggedInUser = (User) session.getAttribute("user");
         return cartService.getCartItemsByCartId(loggedInUser.getCart().getId());
     }
