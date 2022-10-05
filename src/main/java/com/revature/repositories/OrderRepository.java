@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.models.CustomerOrder;
 @Transactional
+@Repository
 public interface OrderRepository extends JpaRepository<CustomerOrder, Integer>  {
 	@Query(value="SELECT * FROM customer_order WHERE order_id=?1", nativeQuery=true)
 	CustomerOrder findByOrderID(int orderId);
