@@ -24,11 +24,9 @@ public class LoggingAspect {
 	@Before(value="execution(* com.revature.controllers.*.*(..))")
 	public void logBeforeController(JoinPoint jp) throws JsonProcessingException {
 		log.info("Incoming request routed to - [ {} : {} ]", jp.getTarget().getClass().getName(), jp.getSignature().getName());
-		if (jp.getArgs().length > 0) {
-			if (!(jp.getArgs()[0] instanceof org.apache.catalina.session.StandardSessionFacade)) {
-				String requestJSON = om.writeValueAsString(jp.getArgs()[0]);
-				log.info("Request body is: {}", requestJSON);
-			}
+		if (jp.getArgs().length > 0 && !(jp.getArgs()[0] instanceof org.apache.catalina.session.StandardSessionFacade) ) {
+			String requestJSON = om.writeValueAsString(jp.getArgs()[0]);
+			log.info("Request body is: {}", requestJSON);
 		}
 	}
 	
@@ -43,17 +41,15 @@ public class LoggingAspect {
 	}
 	
 	@Before(value="execution(* com.revature.repositories.*.*(..))")
-	public void logBeforeDAO(JoinPoint jp) throws JsonProcessingException {
+	public void logBeforeDAO(JoinPoint jp) {
 		log.debug("calling dao method - [ {} : {} ]: with args", jp.getTarget().getClass().getName(), jp.getSignature().getName());
 		for (Object arg : jp.getArgs()) {
-			//log.debug("{} : {}", arg.getClass().getName(), om.writeValueAsString(arg));
-			//log.debug("{}", arg.getClass().getName());
+			log.debug("{} : {}", arg.getClass().getName(), arg.toString());
 		}
 	}
 	
 	@AfterReturning(value="execution(* com.revature.repositories.*.*(..))", returning = "result")
-	public void logAfterDAO(JoinPoint jp, Object result) throws JsonProcessingException {
-		//log.debug("Exiting dao method - [ {} : {} ]: returning {}", jp.getTarget().getClass().getName(), jp.getSignature().getName(), om.writeValueAsString(result));
-		log.debug("Exiting dao method - [ {} : {} ]", jp.getTarget().getClass().getName(), jp.getSignature().getName());
+	public void logAfterDAO(JoinPoint jp, Object result) {
+		log.debug("Exiting dao method - [ {} : {} ]: returning {}", jp.getTarget().getClass().getName(), jp.getSignature().getName(), result.toString());
 	}
 }
