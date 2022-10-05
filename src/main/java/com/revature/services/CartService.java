@@ -1,25 +1,34 @@
 package com.revature.services;
 
-
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.revature.models.Cart;
+import com.revature.models.CartItem;
+import com.revature.models.Product;
+import com.revature.repositories.CartItemRepository;
 import com.revature.repositories.CartRepository;
+import com.revature.repositories.ProductRepository;
 
 @Service
 public class CartService {
     @Autowired
     private CartRepository cartRepo;
 
-    public CartService(CartRepository cartRepo){
-        this.cartRepo=cartRepo;
+    @Autowired
+    private CartItemRepository cartItemRepo;
+    @Autowired
+    private ProductRepository productRepo;
+
+    public CartService(CartRepository cartRepo, CartItemRepository cartItemRepo) {
+        this.cartRepo = cartRepo;
+        this.cartItemRepo = cartItemRepo;
     }
 
-    public Cart create(Cart cart){
+    public Cart create(Cart cart) {
         return cartRepo.save(cart);
     }
 
@@ -27,22 +36,56 @@ public class CartService {
         return cartRepo.findAll();
     }
 
-    public Cart findById(int id){
+    public Cart findById(int id) {
         return cartRepo.getById(id);
     }
 
-    public boolean update(Cart cart){
+    public boolean update(Cart cart) {
 
         Cart target = cartRepo.getById(cart.getId());
         target.setDateModified(cart.getDateModified());
-		target.setTotalQuantity(cart.getTotalQuantity());
-		target.setId(cart.getId());
-		return cartRepo.save(target) != null;
+        target.setTotalQuantity(cart.getTotalQuantity());
+        target.setId(cart.getId());
+        return cartRepo.save(target) != null;
 
     }
-    public boolean delete(Cart cart){
+
+    public boolean delete(Cart cart) {
         cartRepo.delete(cart);
-        return true; 
+        return true;
+    }
+
+    public List<CartItem> getCartItemsByCartId(int id) {
+        return cartItemRepo.getCartItemsByCartId(id);
+    }
+
+    public boolean addCartItem(Cart cart, int productId) {
+        CartItem item = new CartItem();
+
+        Optional<Product> product = productRepo.findById(productId);
+
+        if (product.isPresent()) {
+            item.setProduct(product.get());
+            item.setCart(cart);
+            return cartItemRepo.save(item) != null;
+        }
+
+        return false;
+    }
+
+    public boolean deleteCartItem(Cart cart, int productId) {
+        CartItem item = new CartItem();
+
+        Optional<Product> product = productRepo.findById(productId);
+
+        if (product.isPresent()) {
+            item.setProduct(product.get());
+            item.setCart(cart);
+            cartItemRepo.delete(item);
+            return true;
+        }
+
+        return false;
     }
 
 }
