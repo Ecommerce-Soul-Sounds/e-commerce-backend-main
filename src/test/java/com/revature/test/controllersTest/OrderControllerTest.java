@@ -102,14 +102,14 @@ static void setUpBeforeClass() throws Exception {
 @Test
 @Order(1)
 @DisplayName("1. AppContext Sanity Test")
-public void contextLoads() throws Exception {
+void contextLoads() throws Exception {
 
 	assertThat(orderController).isNotNull();
 }
 @Test
 @Order(2)
 @DisplayName("2. Get Customer Order Test")
-public void testCreateUserRole() throws Exception {
+void testCreateUserRole() throws Exception {
 	// id number of this creation should be 3
 	o1.setId(3);
 	//tell Mockito the behavior that I want this method to act like in the mock environment
