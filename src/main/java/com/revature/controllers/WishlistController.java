@@ -40,7 +40,7 @@ public class WishlistController {
 	public @ResponseBody String addWishlistItem(@RequestBody int productId, HttpSession session) {
 		User loggedInUser = (User) session.getAttribute("user");
 		wishlistService.updateWishlist(loggedInUser.getWishlist());
-		Boolean success = wishlistService.addWishlistItem(loggedInUser.getWishlist(), productId);
+		boolean success = wishlistService.addWishlistItem(loggedInUser.getWishlist(), productId);
 		return success ? "Item added to wishlist" : "Something went wrong, item was not added to wishlist." ;
 	}
 
@@ -48,7 +48,7 @@ public class WishlistController {
 	@DeleteMapping("/delete-item")
 	public @ResponseBody String deleteWishlistItem(@RequestBody int productId, HttpSession session) {
 		User loggedInUser = (User) session.getAttribute("user");
-		Boolean success = wishlistService.deleteWishlistItem(loggedInUser.getWishlist(), productId);
+		boolean success = wishlistService.deleteWishlistItem(loggedInUser.getWishlist(), productId);
 		return success ? "Item successfully removed from your wishlist." : "Something went wrong, item could not be removed.";
 	}
 }
