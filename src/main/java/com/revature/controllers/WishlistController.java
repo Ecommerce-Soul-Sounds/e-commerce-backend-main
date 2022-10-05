@@ -4,6 +4,7 @@ import com.revature.annotations.Authorized;
 import com.revature.models.User;
 import com.revature.models.Wishlist;
 import com.revature.models.WishlistItem;
+
 import com.revature.services.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
