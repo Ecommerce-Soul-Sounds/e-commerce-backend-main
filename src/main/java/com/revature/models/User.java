@@ -41,15 +41,15 @@ public class User {
     
     private byte[] picture;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="address_id", referencedColumnName="address_id")
     private Address address;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="wishlist_id", referencedColumnName="wishlist_id")
     private Wishlist wishlist;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="cart_id", referencedColumnName="cart_id")
     private Cart cart;
 }
