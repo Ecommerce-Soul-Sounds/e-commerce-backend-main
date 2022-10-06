@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.exceptions.CartErrorException;
 import com.revature.models.Cart;
 import com.revature.models.CartItem;
 import com.revature.models.CustomerOrder;
@@ -44,7 +45,7 @@ public class OrderController {
         List<CartItem> items = orderService.findAllByCart(loggedInUser.getCart());
 
         if (items.isEmpty()) {
-            return "Cart is empty";
+            throw new CartErrorException("Cart is Empty");
         } else {
             double totalPrice = 0;
 
@@ -70,7 +71,6 @@ public class OrderController {
                 loggedInUser.setCart(persistedCart);
                 // update new User cart in DB
                 if (orderService.updateUserCart(loggedInUser) > 0) {
-                    System.out.println("NEW CART ID ASSIGNED: " + loggedInUser.getCart().getId());
                     return "Order placed successfully.";
                 } else {
                     return "Order could not be placed at this time. Please try again.";
