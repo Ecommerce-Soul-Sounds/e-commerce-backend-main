@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class OrderController {
     // get all orders belonging to currently logged in user. Can be filtered by status depending on provided status param
     @Authorized
     @GetMapping("/all")
-    public @ResponseBody List<CustomerOrder> getCustomerOrders(@RequestParam(required = false) String status, HttpServletRequest request) {
-        User loggedInUser = (User) request.getSession().getAttribute("user");
+    public @ResponseBody List<CustomerOrder> getCustomerOrders(@RequestParam(required = false) String status, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
         if (status != null) {
             return orderService.getCustomerOrdersByStatus(loggedInUser, orderService.getStatusByName(status));
         } else {
@@ -38,8 +39,8 @@ public class OrderController {
     // purchase all items in the current User's cart
     @Authorized
     @PostMapping("/purchase")
-    public @ResponseBody String purchase(HttpServletRequest request) {
-        User loggedInUser = (User) request.getSession().getAttribute("user");
+    public @ResponseBody String purchase(HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
 
         List<CartItem> items = orderService.findAllByCart(loggedInUser.getCart());
         double totalQuantity = 0;
