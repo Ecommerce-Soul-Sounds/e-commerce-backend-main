@@ -206,32 +206,10 @@ public class ProductControllerTest {
 
     }
 
+
     @Test
     @Order(7)
-    @DisplayName("7. Test purchase")
-    void testPurchase()throws Exception {
-        
-        
-        when(productService.findById(mockProductInfo1.getId())).thenReturn(Optional.of(mockProduct1));
-        when(productService.saveAll(dummyDb,dummyDb2)).thenReturn(dummyDb);
-        
-//         RequestBuilder request = MockMvcRequestBuilders.patch("/api/product")
-//         .accept(MediaType.APPLICATION_JSON_VALUE)
-//         .content(om.writeValueAsString(dummyDb2))
-//         .contentType(MediaType.APPLICATION_JSON);
-// MvcResult result = mockmvc.perform(request).andExpect(status().isOk()).andReturn();
-//assertEquals(("Item added to wishlist"), result.getResponse().getContentAsString());
-
-mockmvc.perform(patch("/api/product").contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(dummyDb2)))
-                .andExpect(status().isOk());
-        
-
-    }
-
-    @Test
-    @Order(8)
-    @DisplayName("8. Update product")
+    @DisplayName("7. Update product")
     void testUpdateProduct() throws Exception{
         when(productService.update(mockProduct1)).thenReturn((mockProduct1));
         RequestBuilder request = MockMvcRequestBuilders.put("/api/product/update")
@@ -244,8 +222,8 @@ mockmvc.perform(patch("/api/product").contentType(MediaType.APPLICATION_JSON)
     }
 
     @Test
-    @Order(9)
-    @DisplayName("9. Upsert prodcut")
+    @Order(8)
+    @DisplayName("8. Upsert prodcut")
     void testUpsert() throws Exception {
         mockProduct1.setName("newName");
 
