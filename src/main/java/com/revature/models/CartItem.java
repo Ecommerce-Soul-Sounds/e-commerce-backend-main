@@ -27,11 +27,11 @@ public class CartItem {
 
 	private int quantity;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "product_id", referencedColumnName = "product_id")
 	private Product product;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
 	private Cart cart;
 }
