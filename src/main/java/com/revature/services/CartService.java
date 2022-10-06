@@ -64,22 +64,8 @@ public class CartService {
     public boolean addCartItem(Cart cart, int productId, int quantity) {
         List<CartItem> currentCartItems = cartItemRepo.getCartItemsByCartId(cart.getId());
         if (currentCartItems.isEmpty()) {
-            CartItem item = new CartItem();
-
-            Optional<Product> product = productRepo.findById(productId);
-
-            if (product.isPresent()) {
-                item.setProduct(product.get());
-                item.setQuantity(quantity);
-                item.setCart(cart);
-
-                cartItemRepo.save(item);
-
-                int currCartQuantity = cart.getTotalQuantity();
-                cart.setTotalQuantity(currCartQuantity + item.getQuantity());
-
+            if (saveNewCartItem(cart, productId, quantity))
                 return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId()) > 0;
-            }
         } else {
             for (CartItem cartItem : currentCartItems) {
                 if (cartItem.getProduct().getId() == productId) {
@@ -94,21 +80,27 @@ public class CartService {
                     }
                 }
             }
-            CartItem item = new CartItem();
-
-            Optional<Product> product = productRepo.findById(productId);
-
-            if (product.isPresent()) {
-                item.setProduct(product.get());
-                item.setQuantity(quantity);
-                item.setCart(cart);
-                cartItemRepo.save(item);
-
-                int currCartQuantity = cart.getTotalQuantity();
-                cart.setTotalQuantity(currCartQuantity + item.getQuantity());
-
+            if (saveNewCartItem(cart, productId, quantity))
                 return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId()) > 0;
-            }
+        }
+        return false;
+    }
+
+    private boolean saveNewCartItem(Cart cart, int productId, int quantity) {
+        CartItem item = new CartItem();
+
+        Optional<Product> product = productRepo.findById(productId);
+
+        if (product.isPresent()) {
+            item.setProduct(product.get());
+            item.setQuantity(quantity);
+            item.setCart(cart);
+            cartItemRepo.save(item);
+
+            int currCartQuantity = cart.getTotalQuantity();
+            cart.setTotalQuantity(currCartQuantity + item.getQuantity());
+
+            return true;
         }
         return false;
     }
