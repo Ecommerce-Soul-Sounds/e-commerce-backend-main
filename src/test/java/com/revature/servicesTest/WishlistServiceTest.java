@@ -46,12 +46,6 @@ class WishlistServiceTest {
     
     @BeforeAll
     static void setupBeforeClass() {
-        mockWishlistDao = Mockito.mock(WishlistRepository.class);
-        mockWishlistItemDao = Mockito.mock(WishlistItemRepository.class);
-        mockProductDao = Mockito.mock(ProductRepository.class);
-        
-        wishlistService = new WishlistService();
-
         wishlist1 = new Wishlist(1, LocalDate.now());
         product1 = new Product(1, 10, 100, "Instrument", "TrumpetsRUs", "A Trumpet", null, "Trumpet");
         item1 = new WishlistItem(1, product1, wishlist1);

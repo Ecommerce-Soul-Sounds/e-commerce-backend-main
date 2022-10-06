@@ -25,17 +25,9 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Autowired
-    private CartService cartService;
-    @Autowired
-    private WishlistService wishlistService;
-    @Autowired
-    private UserAddressService addressService;
-
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
@@ -66,17 +58,15 @@ public class AuthController {
         receivedAddress.setCity(registerRequest.getCity());
         receivedAddress.setState(registerRequest.getState());
         receivedAddress.setZipcode(registerRequest.getZipcode());
-        Address persistedAddress = addressService.create(receivedAddress);
 
         User createdUser = new User();
         createdUser.setEmail(registerRequest.getEmail());
         createdUser.setPassword(registerRequest.getPassword());
         createdUser.setFirstName(registerRequest.getFirstName());
         createdUser.setLastName(registerRequest.getLastName());
-        createdUser.setAddress(persistedAddress);
-        createdUser.setCart(cartService.create(new Cart()));
-        createdUser.setWishlist(wishlistService.addWishlist(new Wishlist()));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(createdUser));
+        User persistedUser = authService.register(createdUser, receivedAddress);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(persistedUser);
     }
 }
