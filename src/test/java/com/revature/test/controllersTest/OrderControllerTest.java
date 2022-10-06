@@ -1,15 +1,15 @@
 package com.revature.test.controllersTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -17,11 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.MethodOrderer;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -37,16 +33,16 @@ import com.revature.services.OrderService;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class OrderControllerTest {	
+public class OrderControllerTest {
 
 	@Mock
 	private static OrderService mockOrderService;
-	
+
 	@InjectMocks
 	private static OrderController orderController;
-	
+
 	private static ObjectMapper om = new ObjectMapper();
-	
+
 	private static CustomerOrder o1, o2;
 	private static User u1, u2;
 	private static Address a1, a2;
@@ -55,7 +51,6 @@ public class OrderControllerTest {
 	private static OrderStatus os1, os2;
 	private static List<CustomerOrder> dummydb;
 
-	
 	public boolean isValidJSON(final String json) {
 		boolean valid = false;
 		try {
@@ -68,7 +63,6 @@ public class OrderControllerTest {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-
 		return valid;
 	}
 
@@ -92,18 +86,18 @@ public class OrderControllerTest {
 	public void contextLoads() throws Exception {
 		assertThat(orderController).isNotNull();
 	}
-	
+
 	@Test
 	@Order(2)
 	@DisplayName("2. Test get orders by customer")
 	public void testGetCustomerOrders() {
-		
+
 	}
-	
+
 	@Test
 	@Order(3)
 	@DisplayName("3.Test place order")
 	public void testPlaceOrder() {
-		
+
 	}
 }
