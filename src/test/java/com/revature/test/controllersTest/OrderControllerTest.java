@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +122,7 @@ void testCreateUserRole() throws Exception {
 			.content(om.writeValueAsString(o1.getStatus().getStatus()))
 			.contentType(MediaType.APPLICATION_JSON);
 	MvcResult result = mockmvc.perform(request).andReturn();
-	System.out.println(result.getResponse());
+	om.setDateFormat(new SimpleDateFormat());
 	//assert
 	assertEquals(om.writeValueAsString(ClientMessageUtil.CREATION_SUCCESSFUL),
 			result.getResponse().getContentAsString());
