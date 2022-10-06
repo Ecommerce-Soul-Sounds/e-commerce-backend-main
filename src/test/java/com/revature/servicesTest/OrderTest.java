@@ -183,10 +183,10 @@ class OrderTest {
 	@DisplayName("9. Create Cart")
 	void testCreateCart () {
 
-        when(oserv.createcart(c1)).thenReturn(c1);
+        when(oserv.createCart(c1)).thenReturn(c1);
 		//when(mockdao.save(o1)).thenReturn(o1);
 		
-		assertEquals(c1, oserv.createcart(c1));
+		assertEquals(c1, oserv.createCart(c1));
 
     }
 	 @Test

@@ -1,5 +1,7 @@
 package com.revature.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,17 +61,55 @@ public class CartService {
         return cartItemRepo.getCartItemsByCartId(id);
     }
 
-    public boolean addCartItem(Cart cart, int productId) {
-        CartItem item = new CartItem();
+    public boolean addCartItem(Cart cart, int productId, int quantity) {
+        List<CartItem> currentCartItems = cartItemRepo.getCartItemsByCartId(cart.getId());
+        if (currentCartItems.isEmpty()) {
+            CartItem item = new CartItem();
 
-        Optional<Product> product = productRepo.findById(productId);
+            Optional<Product> product = productRepo.findById(productId);
 
-        if (product.isPresent()) {
-            item.setProduct(product.get());
-            item.setCart(cart);
-            return cartItemRepo.save(item) != null;
+            if (product.isPresent()) {
+                item.setProduct(product.get());
+                item.setQuantity(quantity);
+                item.setCart(cart);
+
+                cartItemRepo.save(item);
+
+                int currCartQuantity = cart.getTotalQuantity();
+                cart.setTotalQuantity(currCartQuantity + item.getQuantity());
+
+                return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId()) > 0;
+            }
+        } else {
+            for (CartItem cartItem : currentCartItems) {
+                if (cartItem.getProduct().getId() == productId) {
+                    int currQuantity = cartItem.getQuantity();
+                    cartItem.setQuantity(currQuantity + quantity);
+
+                    if (cartItemRepo.updateItem(cartItem.getQuantity(), cartItem.getId()) > 0) {
+                        int currCartQuantity = cart.getTotalQuantity();
+                        cart.setTotalQuantity(currCartQuantity - currQuantity + cartItem.getQuantity());
+
+                        return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId()) > 0;
+                    }
+                }
+            }
+            CartItem item = new CartItem();
+
+            Optional<Product> product = productRepo.findById(productId);
+
+            if (product.isPresent()) {
+                item.setProduct(product.get());
+                item.setQuantity(quantity);
+                item.setCart(cart);
+                cartItemRepo.save(item);
+
+                int currCartQuantity = cart.getTotalQuantity();
+                cart.setTotalQuantity(currCartQuantity + item.getQuantity());
+
+                return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId()) > 0;
+            }
         }
-
         return false;
     }
 

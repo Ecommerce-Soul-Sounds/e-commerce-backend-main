@@ -165,7 +165,7 @@ class CartServiceTest {
         when(mockcartitem.save(item)).thenReturn(cartItem1);
     	when(mockProductDao.findById(1)).thenReturn(Optional.of(product1));
 
-        assertEquals(true, cartServ.addCartItem(cart1, 1));
+        assertEquals(true, cartServ.addCartItem(cart1, 1, 1));
     }
 
     @Test

@@ -208,7 +208,7 @@ public class CartControllerTest {
         session.setAttribute("user", u1);
 
         when(cartService.update(u1.getCart())).thenReturn(true);
-        when(cartService.addCartItem(u1.getCart(), 1)).thenReturn(true);
+        when(cartService.addCartItem(u1.getCart(), 1, 1)).thenReturn(true);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/cart/add-item")
                 .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(1))

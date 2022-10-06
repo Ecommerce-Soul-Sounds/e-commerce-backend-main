@@ -9,7 +9,6 @@ import com.revature.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,31 +42,44 @@ public class OrderController {
         User loggedInUser = (User) session.getAttribute("user");
 
         List<CartItem> items = orderService.findAllByCart(loggedInUser.getCart());
-        double totalQuantity = 0;
-        for (CartItem cartItem : items) {
-            totalQuantity += cartItem.getProduct().getPrice();
-        }
 
-        CustomerOrder order = new CustomerOrder();
-        order.setCustomer(loggedInUser);
-        order.setAddress(loggedInUser.getAddress());
-        order.setCart(loggedInUser.getCart());
-        order.setTotal(totalQuantity);
-
-        order.setOrderPlacedDate(LocalDate.now());
-        order.setStatus(orderService.getStatusByName("pending"));
-
-        if (orderService.create(order) > 0) {
-            // Create and assign a new Cart to the User
-            Cart newCart = orderService.createcart(new Cart());
-            loggedInUser.setCart(newCart);
-            // update new User cart in DB
-            orderService.updateUserCart(loggedInUser);
-
-
-            return "Order placed successfully.";
+        if (items.isEmpty()) {
+            return "Cart is empty";
         } else {
-            return "Order could not be placed at this time. Please try again.";
+            double totalPrice = 0;
+
+            for (CartItem cartItem : items) {
+                totalPrice += cartItem.getProduct().getPrice();
+            }
+
+            CustomerOrder order = new CustomerOrder();
+            order.setCustomer(loggedInUser);
+            order.setAddress(loggedInUser.getAddress());
+            order.setCart(loggedInUser.getCart());
+            order.setTotal(totalPrice);
+
+            order.setOrderPlacedDate(LocalDate.now());
+            order.setStatus(orderService.getStatusByName("pending"));
+
+            if (orderService.create(order) > 0) {
+                // Create and assign a new Cart to the User
+                Cart newCart = new Cart();
+                newCart.setTotalQuantity(0);
+                newCart.setDateModified(LocalDate.now());
+                Cart persistedCart = orderService.createCart(newCart);
+                loggedInUser.setCart(persistedCart);
+                // update new User cart in DB
+                if (orderService.updateUserCart(loggedInUser) > 0) {
+                    System.out.println("NEW CART ID ASSIGNED: " + loggedInUser.getCart().getId());
+                    return "Order placed successfully.";
+                } else {
+                    return "Order could not be placed at this time. Please try again.";
+                }
+
+            } else {
+                return "Order could not be placed at this time. Please try again.";
+            }
         }
+
     }
 }
