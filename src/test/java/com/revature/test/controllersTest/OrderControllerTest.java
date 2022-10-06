@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -110,21 +110,23 @@ void contextLoads() throws Exception {
 @Test
 @Order(2)
 @DisplayName("2. Get Customer Order Test")
-void testCreateUserRole() throws Exception {
+void testGetCustomerOrder() throws Exception {
+	MockHttpSession session = new MockHttpSession();
+	session.setAttribute("user", u1);
 	// id number of this creation should be 3
 	o1.setId(3);
 	//tell Mockito the behavior that I want this method to act like in the mock environment
-	when(oservice.create(o1)).thenReturn(1);
+	when(oservice.getCustomerOrdersByStatus(u1,os1)).thenReturn(dummydb);
 	
 	//act
 	RequestBuilder request = MockMvcRequestBuilders.get("/api/orders/all")
 			.accept(MediaType.APPLICATION_JSON_VALUE)
-			.content(om.writeValueAsString(o1.getStatus().getStatus()))
-			.contentType(MediaType.APPLICATION_JSON);
+			.content(om.writeValueAsString(o1))
+			.contentType(MediaType.APPLICATION_JSON).session(session);
 	MvcResult result = mockmvc.perform(request).andReturn();
-	om.setDateFormat(new SimpleDateFormat());
+	System.out.println(result.getResponse());
 	//assert
-	assertEquals(om.writeValueAsString(ClientMessageUtil.CREATION_SUCCESSFUL),
+	assertEquals("In-cart",
 			result.getResponse().getContentAsString());
 }
 }
