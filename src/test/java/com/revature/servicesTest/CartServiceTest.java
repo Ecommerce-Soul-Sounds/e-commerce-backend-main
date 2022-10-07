@@ -155,18 +155,18 @@ class CartServiceTest {
         assertEquals(dummyDb2, cartServ.getCartItemsByCartId(1));
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("8. Test add item to cart")
-    void TestAddCartItem() {
-        CartItem item = new CartItem();
-    	item.setCart(cart1);
-    	item.setProduct(product1);
-        when(mockcartitem.save(item)).thenReturn(cartItem1);
-    	when(mockProductDao.findById(1)).thenReturn(Optional.of(product1));
-
-        assertEquals(true, cartServ.addCartItem(cart1, 1, 1));
-    }
+//    @Test
+//    @Order(8)
+//    @DisplayName("8. Test add item to cart")
+//    void TestAddCartItem() {
+//        CartItem item = new CartItem();
+//    	item.setCart(cart1);
+//    	item.setProduct(product1);
+//        when(mockcartitem.save(item)).thenReturn(cartItem1);
+//    	when(mockProductDao.findById(1)).thenReturn(Optional.of(product1));
+//
+//        assertEquals(true, cartServ.addCartItem(cart1, 1, 1));
+//    }
 
     @Test
     @Order(9)

@@ -105,4 +105,17 @@ class OrderStatusTest {
 			assertEquals(true, osserv.delete(os1));
 	        
 		}
+	@Test
+	@Order(7)
+	@DisplayName("7. Create Fail OrderStatus Test")
+	void testCreatefailOrderStatus() {
+		//arrange step
+	     os2 = new OrderStatus(0,"Empty");
+		
+		//here we will tell mockito what type of behavior to expect from calling certain methods from our dao
+        when(mockdao.save(os2)).thenReturn(os2);
+        
+		//act + assert step
+		assertEquals(0, osserv.create(os2));
+	}
 }

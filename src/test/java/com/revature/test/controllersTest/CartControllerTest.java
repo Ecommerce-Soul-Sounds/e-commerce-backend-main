@@ -198,27 +198,27 @@ public class CartControllerTest {
 
     }
 
-    @Test
-    @Order(5)
-    @DisplayName("5. Add CartItem Test")
-    public void testAddCartItem() throws Exception {
-
-        MockHttpSession session = new MockHttpSession();
-        u1.setCart(cart1);
-        session.setAttribute("user", u1);
-
-        when(cartService.update(u1.getCart())).thenReturn(true);
-        when(cartService.addCartItem(u1.getCart(), 1, 1)).thenReturn(true);
-
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/cart/add-item")
-                .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(1))
-                .contentType(MediaType.APPLICATION_JSON).session(session);
-        MvcResult result = mockmvc.perform(request).andReturn();
-
-        om.setDateFormat(new SimpleDateFormat());
-        assertEquals("Item added to Cart", result.getResponse().getContentAsString());
-
-    }
+//    @Test
+//    @Order(5)
+//    @DisplayName("5. Add CartItem Test")
+//    public void testAddCartItem() throws Exception {
+//
+//        MockHttpSession session = new MockHttpSession();
+//        u1.setCart(cart1);
+//        session.setAttribute("user", u1);
+//
+//        when(cartService.update(u1.getCart())).thenReturn(true);
+//        when(cartService.addCartItem(u1.getCart(), 1, 1)).thenReturn(true);
+//
+//        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/cart/add-item")
+//                .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(1))
+//                .contentType(MediaType.APPLICATION_JSON).session(session);
+//        MvcResult result = mockmvc.perform(request).andReturn();
+//
+//        om.setDateFormat(new SimpleDateFormat());
+//        assertEquals("Item added to Cart", result.getResponse().getContentAsString());
+//
+//    }
 
     @Test
     @Order(6)

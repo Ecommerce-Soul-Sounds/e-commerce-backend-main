@@ -1,6 +1,8 @@
 package com.revature.services;
 
+import com.revature.models.Address;
 import com.revature.models.User;
+import com.revature.repositories.UserAddressRepository;
 import com.revature.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +12,13 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserAddressRepository userAddressRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    public UserService(UserRepository userRepository, UserAddressRepository userAddressRepository) {
+		super();
+		this.userRepository = userRepository;
+		this.userAddressRepository = userAddressRepository;
+	}
 
     public Optional<User> findByCredentials(String email, String password) {
         return userRepository.findByEmailAndPassword(email, password);
@@ -37,8 +42,24 @@ public class UserService {
     public int updateUserCart(User user) {
         return userRepository.updateUserCart(user.getCart().getId(), user.getId());
     }
+    public Address findById(int id){
+        return userAddressRepository.getById(id);
+    }
+    public boolean updateAddress(Address address){
+        Address target = userAddressRepository.getById(address.getId());
 
-    public void deleteUser(User user) {
+		target.setLine1(address.getLine1());
+        target.setLine2(address.getLine2());
+        target.setCity(address.getCity());
+        target.setState(address.getState());
+        target.setZipcode(address.getId());
+		target.setId(address.getId());
+		
+        return userAddressRepository.save(target) != null;
+    }
+
+    public boolean deleteUser(User user) {
         userRepository.delete(user);
+        return true;
     }
 }
