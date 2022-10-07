@@ -5,20 +5,15 @@ import com.revature.dtos.UpdateUserRequestInfo;
 import com.revature.models.Address;
 import com.revature.models.ClientMessage;
 import com.revature.models.User;
-import com.revature.services.UserAddressService;
 import com.revature.services.UserService;
 import com.revature.util.ClientMessageUtil;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/user")
@@ -26,9 +21,6 @@ import java.nio.file.Paths;
 public class UserController {
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserAddressService addressService;
 
     @Authorized
     @PutMapping("/update")
@@ -54,7 +46,7 @@ public class UserController {
             receivedAddress.setState(userUpdateInfo.getState());
             receivedAddress.setZipcode(userUpdateInfo.getZipcode());
 
-            if (addressService.update(receivedAddress)) {
+            if (userService.updateAddress(receivedAddress)) {
                 loggedInUser.setAddress(receivedAddress);
             }
         }
