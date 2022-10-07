@@ -98,9 +98,14 @@ public class CartController {
 
     @Authorized
     @GetMapping("/items")
-    public @ResponseBody List<CartItem> getCartItems(HttpSession session) {
+    public @ResponseBody List<CartItem> getCurrentCartItems(HttpSession session) {
         User loggedInUser = (User) session.getAttribute("user");
         return cartService.getCartItemsByCartId(loggedInUser.getCart().getId());
     }
 
+    @Authorized
+    @GetMapping("/order-items")
+    public @ResponseBody List<CartItem> getPreviousOrderCartItems(@RequestParam int cartId) {
+        return cartService.getCartItemsByCartId(cartId);
+    }
 }
