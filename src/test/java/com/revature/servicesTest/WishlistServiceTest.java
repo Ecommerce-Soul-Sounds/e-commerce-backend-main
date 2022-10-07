@@ -20,10 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,17 +39,15 @@ class WishlistServiceTest {
     @InjectMocks
     private static WishlistService wishlistService;
     
-    private static Wishlist wishlist1,wishlist2;
-    private static Product  product1,product2;
+    private static Wishlist wishlist1;
+    private static Product  product1;
     private static WishlistItem item1;
 
     
     @BeforeAll
     static void setupBeforeClass() {
         wishlist1 = new Wishlist(1, LocalDate.now());
-        wishlist2=new Wishlist(0,LocalDate.now());
         product1 = new Product(1, 10, 100, "Instrument", "TrumpetsRUs", "A Trumpet", null, "Trumpet");
-        product2= new Product(0,0,0,"","","",null,"");
         item1 = new WishlistItem(1, product1, wishlist1);
     }
 
@@ -130,23 +126,4 @@ class WishlistServiceTest {
     	when(mockWishlistItemDao.getWishlistItemsByWishlistID(1)).thenReturn(list);
     	assertEquals(list , wishlistService.getWishlistItemsByWishlist(wishlist1));
     }
-    @Test
-    @Order(8)
-    @DisplayName("8. Test delete wishlist")
-    void testDeleteWishlist() {
-    	doNothing().when(mockWishlistDao).delete(wishlist1);
-		// act + assert step
-		assertEquals(true, wishlistService.deleteWishlist(wishlist1));
-    }
 }
-//    @Test
-//    @Order(9)
-//    @DisplayName("9. Test Fail remove from wishlist")
-//    void testRemoveFailFromWishlist() {
-//    	WishlistItem item = new WishlistItem();
-//    	item.setWishlist(wishlist2);
-//    	item.setProduct(product2);
-//    	when(mockProductDao.findById(0)).thenReturn(Optional.of(product2));
-//    	assertFalse(wishlistService.deleteWishlistItem(wishlist2, 0));
-//    }
-//}

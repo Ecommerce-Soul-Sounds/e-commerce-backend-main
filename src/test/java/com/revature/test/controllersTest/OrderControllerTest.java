@@ -3,10 +3,6 @@ package com.revature.test.controllersTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
 import java.time.*;
@@ -22,17 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.MethodOrderer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -102,48 +87,12 @@ public class OrderControllerTest {
 		assertThat(orderController).isNotNull();
 	}
 
+	@Test
+	@Order(2)
+	@DisplayName("2. Test get orders by customer")
+	void testGetCustomerOrders() {
 
-@Test
-@Order(2)
-@DisplayName("2. Get Customer Order By status Test")
-void testGetCustomerOrderByStatus() throws Exception {
-	MockHttpSession session = new MockHttpSession();
-	session.setAttribute("user", u1);
-	// id number of this creation should be 3
-	o1.setId(3);
-	 MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
-     paramsMap.add("status", os1.getStatus());
-	//tell Mockito the behavior that I want this method to act like in the mock environment
-	when(mockOrderService.getCustomerOrdersByStatus(u1,os1)).thenReturn(dummydb);
-	
-	//act
-	 RequestBuilder request = MockMvcRequestBuilders.get("/api/orders/all")
-             .accept(MediaType.APPLICATION_JSON_VALUE)
-             .content(om.writeValueAsString(os1.getStatus()))
-             .contentType(MediaType.APPLICATION_JSON).session(session);
-     MvcResult result = mockmvc.perform(request).andReturn();
-     assertEquals(om.writeValueAsString(dummydb), result.getResponse().getContentAsString());
-}
-@Test
-@Order(3)
-@DisplayName("3. Get all Customer Order Test")
-void testGetAllCustomerOrder() throws Exception {
-	MockHttpSession session = new MockHttpSession();
-	session.setAttribute("user", u1);
-	// id number of this creation should be 3
-	o1.setId(3);
-	 MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
-     paramsMap.add("status", os1.getStatus());
-	//tell Mockito the behavior that I want this method to act like in the mock environment
-	when(mockOrderService.getAllCustomerOrders(u1)).thenReturn(dummydb);
-	
-	//act
-	mockmvc.perform(get("/api/orders/all").params(paramsMap))
-    .andExpect(status().isOk())
-    .andExpect(jsonPath("$.size()").value(dummydb.size()))
-    .andDo(print());
-}
-
+	}
 
 	@Test
 	@Order(3)
@@ -151,5 +100,4 @@ void testGetAllCustomerOrder() throws Exception {
 	void testPlaceOrder() {
 
 	}
-
 }
