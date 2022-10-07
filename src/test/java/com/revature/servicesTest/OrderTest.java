@@ -216,6 +216,26 @@ class OrderTest {
 
 	        assertEquals(dummydb, oserv.getAllCustomerOrders(u1));
 	    }
+	 @Test
+		@Order(13)
+		@DisplayName("13. Create Order Fail Test")
+		void testFailCreateOrder() {
+			// arrange step
+			LocalDate date = LocalDate.parse("2022-09-28");
+			a2 = new Address(1, "#11 18th Street", "5th Block", "Chicago", "Illinois", 60656);
+			w2 = new Wishlist(0, date);
+			c2 = new Cart(0, date, 0);
+			os2 = new OrderStatus(0, "Empty");
+			u2 = new User(0, "dota2@gmail.com", "dota2", "Phantom", "assassin", new byte[8], a2, w2, c2);
+			o2 = new CustomerOrder(0, u2, a2, c2, 45.87, date, os2);
+
+			// here we will tell mockito what type of behavior to expect from calling
+			// certain methods from our dao
+			when(mockorder.save(o2)).thenReturn(o2);
+
+			// act + assert step
+			assertEquals(0, oserv.create(o2));
+		}
 	 
 
 }

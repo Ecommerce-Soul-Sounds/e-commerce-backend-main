@@ -102,7 +102,7 @@ class AuthServiceTest {
         
         when(mockdao.save(newUser)).thenReturn(newUser);
         
-        assertEquals(newUser, authServ.register(newUser));
+        assertEquals(newUser, authServ.register(newUser,address1));
 
     }
     

@@ -37,8 +37,9 @@ public class WishlistService {
         return wishlistRepo.updateWishlist(LocalDate.now(), wishlist.getId());
     }
 
-    public void deleteWishlist(Wishlist wishlist) {
+    public boolean deleteWishlist(Wishlist wishlist) {
         wishlistRepo.delete(wishlist);
+        return true;
     }
 
 	public List<WishlistItem> getWishlistItemsByWishlist(Wishlist wishlist) {

@@ -18,6 +18,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +34,7 @@ class UserServiceTest {
     private static Wishlist wishlist1;
     private static Cart cart1;
     private static  byte[] picture1;
+    private static User u1;
 
     @BeforeAll
     static void setUpBeforeClass() {
@@ -49,6 +51,8 @@ class UserServiceTest {
         cart1 = new Cart(2, LocalDate.now(), 2);
 
         picture1 = new byte[] {1,2,3};
+        
+        u1 = new User(1, "jowill@gmail.com", "jowill", "joel", "will", new byte[1], address1, wishlist1, cart1);
 
     }
 
@@ -95,4 +99,5 @@ class UserServiceTest {
 		
 		assertEquals(true, userService.updateAddress(address1));
 }
+
 }

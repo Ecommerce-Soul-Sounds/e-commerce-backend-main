@@ -44,6 +44,7 @@ class UserAddressServiceTest {
 
         address1 = new Address(1, "line1", "line2", "city", "state", 123);
         address2 = new Address(2, "line1", "line2", "city2", "state2", 321);
+        address3 =new Address(0,"","","","",0);
 
         dummyDb = new ArrayList<Address>();
 
@@ -108,7 +109,19 @@ class UserAddressServiceTest {
         assertEquals(true, userAddressServ.delete(address1));
         
 	}
+    @Test
+   	@Order(6)
+   	@DisplayName("6.Fail Update Address")
+   	void TestFailUpdateAdress() {
 
+           address3.setCity("TestCity");
+           address3.setState("TestState");
+
+           when(userAddressServ.findById(address3.getId())).thenReturn(address3);
+   		assertEquals(false, userAddressServ.update(address3));
+
+
+       }
 
 
 

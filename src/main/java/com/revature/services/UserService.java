@@ -58,7 +58,8 @@ public class UserService {
         return userAddressRepository.save(target) != null;
     }
 
-    public void deleteUser(User user) {
+    public boolean deleteUser(User user) {
         userRepository.delete(user);
+        return true;
     }
 }
