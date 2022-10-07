@@ -22,7 +22,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-
     // get all orders belonging to currently logged in user. Can be filtered by status depending on provided status param
     @Authorized
     @GetMapping("/all")
