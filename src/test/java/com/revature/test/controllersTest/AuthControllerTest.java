@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.AuthController;
 import com.revature.dtos.LoginRequest;
@@ -37,7 +36,7 @@ import com.revature.services.AuthService;
 @WebMvcTest(AuthController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class AuthControllerTest {
+class AuthControllerTest {
 
 	@Autowired
 	private MockMvc mockmvc;
@@ -64,7 +63,7 @@ public class AuthControllerTest {
 	@Test
 	@Order(1)
 	@DisplayName("1. AppContext Sanity Test")
-	public void contextLoads() {
+	void contextLoads() {
 		assertThat(authController).isNotNull();
 		assertThat(mockmvc).isNotNull();
 	}
@@ -72,7 +71,7 @@ public class AuthControllerTest {
 	@Test
 	@Order(2)
 	@DisplayName("2. Test login user ")
-	public void testLogin() throws Exception{
+	void testLogin() throws Exception{
 		session = new MockHttpSession();
 		String email = "carl@gmail.com";
 		String password = "password";
@@ -96,7 +95,7 @@ public class AuthControllerTest {
 	@Test
 	@Order(3)
 	@DisplayName("3. Test logout user")
-	public void testLogout() throws Exception {
+	void testLogout() throws Exception {
 		session = new MockHttpSession();
 		session.setAttribute("user", user1);
 		
@@ -111,7 +110,7 @@ public class AuthControllerTest {
 	@Test
 	@Order(4)
 	@DisplayName("4.Test register user")
-	public void testRegister() throws Exception {
+	void testRegister() throws Exception {
 		session = new MockHttpSession();
 		String line1 = address1.getLine1();
 		String line2 = address1.getLine2();

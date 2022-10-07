@@ -83,21 +83,21 @@ public class OrderControllerTest {
 	@Test
 	@Order(1)
 	@DisplayName("1. AppContext Sanity Test")
-	public void contextLoads() throws Exception {
+	void contextLoads() throws Exception {
 		assertThat(orderController).isNotNull();
 	}
 
 	@Test
 	@Order(2)
 	@DisplayName("2. Test get orders by customer")
-	public void testGetCustomerOrders() {
+	void testGetCustomerOrders() {
 
 	}
 
 	@Test
 	@Order(3)
 	@DisplayName("3.Test place order")
-	public void testPlaceOrder() {
+	void testPlaceOrder() {
 
 	}
 }
