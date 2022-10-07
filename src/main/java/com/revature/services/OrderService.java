@@ -61,12 +61,12 @@ public class OrderService {
 		return orderStatusRepository.getOrderStatusByStatusName(status);
 	}
 
-	public Cart createcart(Cart cart) {
+	public Cart createCart(Cart cart) {
 		return cartRepository.save(cart);
 	}
 
 	public int updateUserCart(User user) {
-		return userrepository.updateUserCart(user.getId(), user.getCart().getId());
+		return userrepository.updateUserCart(user.getCart().getId(), user.getId());
 	}
 
 	public List<CustomerOrder> getCustomerOrdersByStatus(User customer, OrderStatus status) {

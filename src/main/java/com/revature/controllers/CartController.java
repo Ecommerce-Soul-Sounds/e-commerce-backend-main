@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.revature.dtos.CartItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,10 +80,10 @@ public class CartController {
 
     @Authorized
     @PostMapping("/add-item")
-    public @ResponseBody String addCartItem(@RequestBody int productId, HttpSession session) {
+    public @ResponseBody String addCartItem(@RequestBody CartItemDTO cartItemDTO, HttpSession session) {
         User userLoggedIn = (User) session.getAttribute("user");
         cartService.update(userLoggedIn.getCart());
-        boolean success = cartService.addCartItem(userLoggedIn.getCart(), productId);
+        boolean success = cartService.addCartItem(userLoggedIn.getCart(), cartItemDTO.getProductId(), cartItemDTO.getQuantity());
         return success ? "Item added to Cart" : "Something went wrong, item was not added to Cart.";
     }
 

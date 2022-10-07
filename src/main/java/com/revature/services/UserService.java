@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public int updateUserCart(User user) {
-        return userRepository.updateUserCart(user.getId(), user.getCart().getId());
+        return userRepository.updateUserCart(user.getCart().getId(), user.getId());
     }
     public Address findById(int id){
         return userAddressRepository.getById(id);
