@@ -79,7 +79,7 @@ class AuthControllerTest {
 		
 		when(mockAuthService.findByCredentials(email, password)).thenReturn(Optional.of(user1));
 	
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/auth/login")
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/orders/all")
 													.accept(MediaType.APPLICATION_JSON_VALUE)
 													.contentType(MediaType.APPLICATION_JSON)
 													.content(om.writeValueAsString(body))
