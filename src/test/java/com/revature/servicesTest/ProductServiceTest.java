@@ -32,7 +32,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 public class ProductServiceTest {
     @Mock
     private static ProductRepository mockProductDao;
-    
+
     @InjectMocks
     private static ProductService productServ;
 
@@ -115,7 +115,7 @@ public class ProductServiceTest {
     void testSave() {
         Product product3 = new Product(3, 3, 3.00, "cat3", "brand3", "desc3", "image", "name3");
         when(productServ.save(product3)).thenReturn(product3);
-		assertEquals(product3, productServ.save(product3));
+        assertEquals(product3, productServ.save(product3));
 
     }
 
@@ -123,15 +123,15 @@ public class ProductServiceTest {
     @Order(8)
     @DisplayName("8. Test save all products")
     void testSaveAll() {
-       ProductInfo mockProductInfo1 = new ProductInfo(1, 1);
-       ProductInfo mockProductInfo2 = new ProductInfo(2, 2);
+        ProductInfo mockProductInfo1 = new ProductInfo(1, 1);
+        ProductInfo mockProductInfo2 = new ProductInfo(2, 2);
 
-      List<ProductInfo> dummyDb2 = new ArrayList<>();
-      dummyDb2.add(mockProductInfo1);
-      dummyDb2.add(mockProductInfo2);
+        List<ProductInfo> dummyDb2 = new ArrayList<>();
+        dummyDb2.add(mockProductInfo1);
+        dummyDb2.add(mockProductInfo2);
 
-        when(productServ.saveAll(dummyDb,dummyDb2)).thenReturn(dummyDb);
-		assertEquals(dummyDb, productServ.saveAll(dummyDb,dummyDb2));
+        when(productServ.saveAll(dummyDb, dummyDb2)).thenReturn(dummyDb);
+        assertEquals(dummyDb, productServ.saveAll(dummyDb, dummyDb2));
 
     }
 
@@ -143,8 +143,7 @@ public class ProductServiceTest {
         product2.setBrand("newBrand");
         when(productServ.findById(1)).thenReturn(Optional.of(product1));
         when(mockProductDao.save(product1)).thenReturn(product1);
-	
-		
-		assertEquals(product1, productServ.update(product1));
+
+        assertEquals(product1, productServ.update(product1));
     }
 }
