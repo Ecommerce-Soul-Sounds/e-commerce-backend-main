@@ -11,7 +11,6 @@ import com.revature.repositories.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -20,17 +19,17 @@ import javax.transaction.Transactional;
 @Transactional
 public class AuthService {
     @Autowired
-    private  UserService userService;
+    private UserService userService;
 
     @Autowired
     private CartRepository cartRepo;
-    
+
     @Autowired
     private WishlistRepository wishlistRepo;
-    
+
     @Autowired
     private UserAddressRepository addressRepo;
-    
+
     public AuthService(UserService userService) {
         this.userService = userService;
     }
@@ -40,17 +39,17 @@ public class AuthService {
     }
 
     public User register(User user, Address address) {
-    	Address persistedAddress = addressRepo.save(address);
-    	Cart cart = cartRepo.save(new Cart());
-    	Wishlist wishlist = wishlistRepo.save(new Wishlist());
-    	
-    	if (persistedAddress == null || cart == null || wishlist == null) {
-    		return null;
-    	}
-    	
-    	user.setAddress(persistedAddress);
-    	user.setCart(cart);
-    	user.setWishlist(wishlist);
+        Address persistedAddress = addressRepo.save(address);
+        Cart cart = cartRepo.save(new Cart());
+        Wishlist wishlist = wishlistRepo.save(new Wishlist());
+
+        if (persistedAddress == null || cart == null || wishlist == null) {
+            return null;
+        }
+
+        user.setAddress(persistedAddress);
+        user.setCart(cart);
+        user.setWishlist(wishlist);
         return userService.save(user);
     }
 }
