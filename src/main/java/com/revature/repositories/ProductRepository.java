@@ -18,7 +18,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query(value = "SELECT * FROM product WHERE category = ?1", nativeQuery = true)
     List<Product> getProductsByCategory(String category);
 
-    @Modifying
-    @Query(value = "UPDATE product SET brand=?1, category=?2, description=?3, image=?4, name=?5, price=?6, quantity=?7 WHERE product_id=?8", nativeQuery = true)
-    int updateProduct(String brand, String category, String description, String image, String name, double price, int quantity, int productId);
+    
 }
