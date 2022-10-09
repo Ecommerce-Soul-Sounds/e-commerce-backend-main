@@ -160,9 +160,10 @@ class CartServiceTest {
     @Order(8)
     @DisplayName("8. Test add item to cart.")
     void TestAddCartItem() {
-
+        when(mockcartitem.getCartItemsByCartId(cartItem2.getCart().getId())).thenReturn(dummyDb2);
+        when(mockcart.updateCart(LocalDate.now(), 2, 2)).thenReturn(1);
         when(mockProductDao.findById(2)).thenReturn(Optional.of(product2));
-        when(mockcart.updateCart(LocalDate.now(),2,2)).thenReturn(1);
+       // when(cartServ.saveNewCartItem(cart1,2, 1)).thenReturn(true);
     
 
         assertEquals(true, cartServ.addCartItem(cart2, 2, 0));
