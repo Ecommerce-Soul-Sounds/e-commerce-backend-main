@@ -28,6 +28,9 @@ import com.revature.models.Address;
 import com.revature.models.Cart;
 import com.revature.models.User;
 import com.revature.models.Wishlist;
+import com.revature.repositories.CartRepository;
+import com.revature.repositories.UserAddressRepository;
+import com.revature.repositories.WishlistRepository;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
 
@@ -36,6 +39,14 @@ import com.revature.services.UserService;
 class AuthServiceTest {
     @Mock
 	private static UserService mockdao;
+    @Mock
+    private CartRepository cartRepo;
+    
+    @Mock
+    private WishlistRepository wishlistRepo;
+    
+    @Mock
+    private UserAddressRepository addressRepo;
     
     @InjectMocks
     private static AuthService authServ;
@@ -94,17 +105,20 @@ class AuthServiceTest {
         assertEquals(user1, authServ.findByCredentials(user1.getEmail(), user1.getPassword()).get());
 
     }
-//    @Test
-//	@Order(3)
-//	@DisplayName("3.Register Test")
-//	void testRegister() {
-//        User newUser = new User(3, "email3", "password3", "firstName3", "lastName", picture1, address2, wishlist2, cart1);
-//        
-//        when(mockdao.save(newUser)).thenReturn(newUser);
-//        
-//        assertEquals(newUser, authServ.register(newUser,address1));
-//
-//    }
+   @Test
+	@Order(3)
+	@DisplayName("3.Register Test")
+	void testRegister() {
+       User newUser = new User(3, "email3", "password3", "firstName3", "lastName", picture1, address2, new Wishlist(), new Cart());
+       
+       when(mockdao.save(newUser)).thenReturn(newUser);
+       when(cartRepo.save(new Cart())).thenReturn(new Cart());
+       when(addressRepo.save(address2)).thenReturn(address2);
+       when(wishlistRepo.save(new Wishlist())).thenReturn(new Wishlist());
+       when(authServ.register(newUser,address2)).thenReturn(newUser);
+       
+       assertEquals(newUser, authServ.register(newUser,address2));
+
+   }
     
 }
-
