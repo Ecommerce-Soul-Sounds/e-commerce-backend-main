@@ -158,7 +158,7 @@ class CartServiceTest {
 
     @Test
     @Order(8)
-    @DisplayName("8. Test add item to cart")
+    @DisplayName("8. Test add item to cart.")
     void TestAddCartItem() {
 
         when(mockProductDao.findById(1)).thenReturn(Optional.of(product1));
@@ -170,7 +170,7 @@ class CartServiceTest {
     
     @Test
     @Order(9)
-    @DisplayName("9. Test save cart items from cart")
+    @DisplayName("9. Test save new cart items.")
     void TestsaveNewCartItem() {
         CartItem item = new CartItem();
         item.setProduct(product1); 
