@@ -1,10 +1,10 @@
-# e-commerce-backend
+# E-Commerce-Backend
 > This a web application project developing an e-commerce website for musical instruments and other accessories. We use Spring Boot to build the back-end part and Angular for the front-end part. This Repository is for the back-end.
 
-## User Stores 
+## User Stories 
 - Users can view previous orders.
 - Users can add and remove items from cart
-- Users can register for account 
+- Users can register for account.
 - Users can update account. 
 - Users can checkout/place order.
 - Users can add and remove items from wishlist.
@@ -14,6 +14,7 @@
 - 
 - 
 - 
+
 **ERD**
 <br>
 ![](./imgs/erd.png)
@@ -25,6 +26,8 @@
 <br>
 - Testing was done through JUnit and Mockito 
 - Coverage of 81% 
+
+
 
 ## Tech stack 
 - [ ] PostgreSQL for persistence
