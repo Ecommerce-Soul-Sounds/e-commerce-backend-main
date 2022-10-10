@@ -202,10 +202,10 @@ class OrderTest {
 	    @Order(11)
 	    @DisplayName("11. Get Customer Order By Status Name")
 	    void testGetCustomerOrderByStatusName() {
+			when(mockorderstatus.getOrderStatusByStatusName(os1.getStatus())).thenReturn(os1);
+	        when(oserv.getCustomerOrdersByStatus(u1,os1.getStatus())).thenReturn(dummydb);
 
-	        when(oserv.getCustomerOrdersByStatus(u1,os1)).thenReturn(dummydb);
-
-	        assertEquals(dummydb, oserv.getCustomerOrdersByStatus(u1,os1));
+	        assertEquals(dummydb, oserv.getCustomerOrdersByStatus(u1,os1.getStatus()));
 	    }
 	 @Test
 	    @Order(12)
