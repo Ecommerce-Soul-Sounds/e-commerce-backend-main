@@ -198,17 +198,17 @@ class OrderTest {
 
 	        assertEquals(u1.getCart().getId(), oserv.updateUserCart(u1));
 	    }
-	 @Test
-	    @Order(11)
-	    @DisplayName("11. Get Customer Order By Status Name")
-	    void testGetCustomerOrderByStatusName() {
-  OrderStatus os3=new OrderStatus();
-  os3.setId(1);
-  os3.setStatus("Declined");
-	        when(oserv.getCustomerOrdersByStatus(u2,os3.getStatus())).thenReturn(dummydb);
-
-	        assertEquals(dummydb, oserv.getCustomerOrdersByStatus(u2,os3.getStatus()));
-	    }
+//	 @Test
+//	    @Order(11)
+//	    @DisplayName("11. Get Customer Order By Status Name")
+//	    void testGetCustomerOrderByStatusName() {
+//  OrderStatus os3=new OrderStatus();
+//  os3.setId(1);
+//  os3.setStatus("Declined");
+//	        when(oserv.getCustomerOrdersByStatus(u2,os3.getStatus())).thenReturn(dummydb);
+//
+//	        assertEquals(dummydb, oserv.getCustomerOrdersByStatus(u2,os3.getStatus()));
+//	    }
 	 @Test
 	    @Order(12)
 	    @DisplayName("12. Get All Customer Order By Customer Id")
@@ -239,5 +239,4 @@ class OrderTest {
 			assertEquals(0, oserv.create(o2));
 		}
 	 
-
 }
