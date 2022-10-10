@@ -38,6 +38,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.fasterxml.jackson.datatype.*;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -55,6 +57,9 @@ import com.revature.models.Product;
 import com.revature.models.User;
 import com.revature.models.Wishlist;
 import com.revature.services.CartService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CartController.class)
@@ -270,7 +275,7 @@ public class CartControllerTest {
         u1.setCart(cart1);
 
         when(cartService.update(u1.getCart())).thenReturn(true);
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/api/cart//update-cart")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/api/cart/update-cart")
                 .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(mockCart1))
                 .contentType(MediaType.APPLICATION_JSON);
         MvcResult result = mockmvc.perform(request).andReturn();
@@ -278,6 +283,21 @@ public class CartControllerTest {
         om.setDateFormat(new SimpleDateFormat());
         assertEquals(om.writeValueAsString(UPDATE_SUCCESSFUL), result.getResponse().getContentAsString());
 
+    }
+
+    @Test
+    @Order(9)
+    @DisplayName("9. Test get previous order cart items")
+    public void testgetPreviousOrderCartItems() throws Exception {
+        u1.setCart(cart1);
+
+        when(cartService.getCartItemsByCartId(u1.getCart().getId())).thenReturn(mockCartItemsList);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/api/cart/order-items?cartId=1")
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockmvc.perform(request).andReturn();
+        om.setDateFormat(new SimpleDateFormat());
+        assertEquals(om.writeValueAsString(mockCartItemsList), result.getResponse().getContentAsString());
     }
 
 }
