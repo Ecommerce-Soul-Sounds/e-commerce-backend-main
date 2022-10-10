@@ -21,7 +21,7 @@
 
 **Testing** 
 <br>
-![](./imgs/jacco.png)
+![](./imgs/jacoco.png)
 <br>
 - Testing was done through JUnit and Mockito 
 - Coverage of 81% 
