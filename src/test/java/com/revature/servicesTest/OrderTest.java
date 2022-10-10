@@ -42,9 +42,13 @@ import com.revature.services.OrderService;
 class OrderTest {
 	@Mock
 	private static OrderRepository mockorder;
+	@Mock
 	private static OrderStatusRepository mockorderstatus;
+	@Mock
 	private static CartRepository mockcart;
+	@Mock
 	private static CartItemRepository mockcartitem;
+	@Mock
 	private static UserRepository mockuser;
 	@InjectMocks
 	private static OrderService oserv;
@@ -167,6 +171,7 @@ class OrderTest {
 		assertEquals(cartitemdb, oserv.findAllByCart(c1));
 
 	}
+
 	@Test
 	@Order(8)
 	@DisplayName("8. Get Order Status By Status Name")
@@ -178,6 +183,7 @@ class OrderTest {
 		assertEquals(os1, oserv.getStatusByName("In-Review"));
 
     }
+
 	@Test
 	@Order(9)
 	@DisplayName("9. Create Cart")
@@ -189,7 +195,8 @@ class OrderTest {
 		assertEquals(c1, oserv.createCart(c1));
 
     }
-	 @Test
+
+	@Test
 	    @Order(10)
 	    @DisplayName("10. Update User Cart")
 	    void testUpdateUserCart() {
@@ -198,7 +205,8 @@ class OrderTest {
 
 	        assertEquals(u1.getCart().getId(), oserv.updateUserCart(u1));
 	    }
-	 @Test
+
+	@Test
 	    @Order(11)
 	    @DisplayName("11. Get Customer Order By Status Name")
 	    void testGetCustomerOrderByStatusName() {
@@ -207,7 +215,8 @@ class OrderTest {
 
 	        assertEquals(dummydb, oserv.getCustomerOrdersByStatus(u1,os1.getStatus()));
 	    }
-	 @Test
+
+	@Test
 	    @Order(12)
 	    @DisplayName("12. Get All Customer Order By Customer Id")
 	    void testGetAllCustomerOrderByCustomerId() {
@@ -216,26 +225,36 @@ class OrderTest {
 
 	        assertEquals(dummydb, oserv.getAllCustomerOrders(u1));
 	    }
-	 @Test
-		@Order(13)
-		@DisplayName("13. Create Order Fail Test")
-		void testFailCreateOrder() {
-			// arrange step
-			LocalDate date = LocalDate.parse("2022-09-28");
-			a2 = new Address(1, "#11 18th Street", "5th Block", "Chicago", "Illinois", 60656);
-			w2 = new Wishlist(0, date);
-			c2 = new Cart(0, date, 0);
-			os2 = new OrderStatus(0, "Empty");
-			u2 = new User(0, "dota2@gmail.com", "dota2", "Phantom", "assassin", new byte[8], a2, w2, c2);
-			o2 = new CustomerOrder(0, u2, a2, c2, 45.87, date, os2);
 
-			// here we will tell mockito what type of behavior to expect from calling
-			// certain methods from our dao
-			when(mockorder.save(o2)).thenReturn(o2);
+	@Test
+	@Order(13)
+	@DisplayName("13. Create Order Fail Test")
+	void testFailCreateOrder() {
+		// arrange step
+		LocalDate date = LocalDate.parse("2022-09-28");
+		a2 = new Address(1, "#11 18th Street", "5th Block", "Chicago", "Illinois", 60656);
+		w2 = new Wishlist(0, date);
+		c2 = new Cart(0, date, 0);
+		os2 = new OrderStatus(0, "Empty");
+		u2 = new User(0, "dota2@gmail.com", "dota2", "Phantom", "assassin", new byte[8], a2, w2, c2);
+		o2 = new CustomerOrder(0, u2, a2, c2, 45.87, date, os2);
 
-			// act + assert step
-			assertEquals(0, oserv.create(o2));
-		}
-	 
+		// here we will tell mockito what type of behavior to expect from calling
+		// certain methods from our dao
+		when(mockorder.save(o2)).thenReturn(o2);
+
+		// act + assert step
+		assertEquals(0, oserv.create(o2));
+	}
+
+	@Test
+	@Order(13)
+	@DisplayName("13. Test place order.")
+	void testPlaceOrder() {
+		CustomerOrder newOrder = new CustomerOrder(0, u1, a1, c1, 457.76, LocalDate.now(), null);
+		when(mockcartitem.getCartItemsByCartId(u1.getCart().getId())).thenReturn(cartitemdb);
+		when(mockorder.save(newOrder)).thenReturn(newOrder);
+		assertEquals(true, oserv.placeOrder(u1));
+	}
 
 }
