@@ -2,11 +2,9 @@ package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
 import com.revature.exceptions.CartErrorException;
-import com.revature.models.Cart;
-import com.revature.models.CartItem;
-import com.revature.models.CustomerOrder;
-import com.revature.models.User;
+import com.revature.models.*;
 import com.revature.services.*;
+import com.revature.util.ClientMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +36,7 @@ public class OrderController {
     // purchase all items in the current User's cart
     @Authorized
     @PostMapping("/purchase")
-    public @ResponseBody String purchase(HttpSession session) {
+    public @ResponseBody ClientMessage purchase(HttpSession session) {
         User loggedInUser = (User) session.getAttribute("user");
 
         List<CartItem> items = orderService.findAllByCart(loggedInUser.getCart());
@@ -70,13 +68,13 @@ public class OrderController {
                 loggedInUser.setCart(persistedCart);
                 // update new User cart in DB
                 if (orderService.updateUserCart(loggedInUser) > 0) {
-                    return "Order placed successfully.";
+                    return ClientMessageUtil.ORDER_SUBMISSION_SUCCESSFUL;
                 } else {
-                    return "Order could not be placed at this time. Please try again.";
+                    return ClientMessageUtil.ORDER_SUBMISSION_FAILED;
                 }
 
             } else {
-                return "Order could not be placed at this time. Please try again.";
+                return ClientMessageUtil.ORDER_SUBMISSION_FAILED;
             }
         }
 
