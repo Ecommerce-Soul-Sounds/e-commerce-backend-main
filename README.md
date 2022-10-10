@@ -1,5 +1,5 @@
 # e-commerce-backend
-> This a web application project developing an e-commerce website for musical instruments and other accessoories. We use Spring Boot to build the back-end part, and Angualr for the front-end part. This Respository is for the back-end.
+> This a web application project developing an e-commerce website for musical instruments and other accessories. We use Spring Boot to build the back-end part and Angular for the front-end part. This Repository is for the back-end.
 
 ## User Stores 
 - Users can view previous orders.
