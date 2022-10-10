@@ -8,12 +8,16 @@
 - Users can update account. 
 - Users can checkout/place order.
 - Users can add and remove items from wishlist.
-- Users can get view all products our by a filter of category or brand.
+- Users can view all products or filter by category or brand.
 
-## How to run application
-- 
-- 
-- 
+## How to run application locally  
+1. Create a new database in a local database server.
+2. Change the Application Properties (E.g. username/password of DB) present in ``resources/application.yml``  according to the newly created local database server.  
+3. Run the Spring Boot application on any IDE of preference.
+    - After running the application, database will be populated with tables.
+4. Import and run SQL script to populate the Ecommerce database with data. 
+5. (Optional) Go to http://localhost:8080/api/swagger-ui.html/ for documentation on endpoints and models.
+    - Note documentation is only available after the start-up of the application.
 
 **ERD**
 <br>
