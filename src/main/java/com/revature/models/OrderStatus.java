@@ -22,9 +22,9 @@ public class OrderStatus {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="status_id")
+	@Column(name = "status_id")
 	private int id;
-	
+
 	@Column(nullable = false)
 	private String status;
 

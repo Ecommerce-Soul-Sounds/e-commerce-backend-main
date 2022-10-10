@@ -27,7 +27,7 @@ public class OrderService {
 	private CartRepository cartRepository;
 	private CartItemRepository cartitemrepository;
 	private UserRepository userrepository;
-	
+
 	public OrderService(OrderRepository orderRepository, CartRepository cartRepository,
 			CartItemRepository cartitemrepository, UserRepository userrepository,
 			OrderStatusRepository orderStatusRepository) {
@@ -38,6 +38,7 @@ public class OrderService {
 		this.userrepository = userrepository;
 		this.orderStatusRepository = orderStatusRepository;
 	}
+
 	private OrderStatusRepository orderStatusRepository;
 
 	public int create(CustomerOrder order) {
@@ -58,7 +59,6 @@ public class OrderService {
 
 	}
 
-
 	public OrderStatus getStatusByName(String status) {
 		return orderStatusRepository.getOrderStatusByStatusName(status);
 	}
@@ -75,18 +75,20 @@ public class OrderService {
 		OrderStatus status = orderStatusRepository.getOrderStatusByStatusName(statusName);
 		return orderRepository.findCustomerOrdersByStatus(customer.getId(), status.getId());
 	}
+
 	public CustomerOrder findByOrderID(int orderId) {
 		return orderRepository.findByOrderID(orderId);
 	}
-	
+
 	public boolean updatestatus(OrderStatus orderStatus, CustomerOrder orderId) {
 		return orderRepository.updatestatus(orderStatus.getId(), orderId.getId());
 	}
-	
+
 	public boolean delete(CustomerOrder order) {
 		orderRepository.delete(order);
 		return true;
 	}
+
 	public boolean placeOrder(User loggedInUser) {
 		List<CartItem> items = cartitemrepository.getCartItemsByCartId(loggedInUser.getCart().getId());
 
@@ -117,7 +119,7 @@ public class OrderService {
 				loggedInUser.setCart(persistedCart);
 				userrepository.save(loggedInUser);
 				// update new User cart in DB
-				
+
 				return true;
 			}
 
