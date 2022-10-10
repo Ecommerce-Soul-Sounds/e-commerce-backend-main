@@ -1,5 +1,5 @@
 # E-Commerce-Backend
-> This a web application project developing an e-commerce website for musical instruments and other accessories. We use Spring Boot to build the back-end part and Angular for the front-end part. This Repository is for the back-end.
+> This a web application project for developing an e-commerce website for musical instruments and other accessories. We use Spring Boot to build the back-end part and Angular for the front-end part. This Repository is for the back-end.
 
 ## User Stories 
 - Users can view previous orders.
@@ -38,12 +38,14 @@
 - [ ] API built with Java 8 and Spring 5
 - [ ] Git SCM (hosted on GitHub)
 - [ ] Testing built using JUnit & Mockito
+- [ ] Jacoco for validation and measure of code coverage  
 
 ## Technology framework 
 - [ ] Java API will leverage the Spring Framework
 - [ ] Java API will use Spring Data JPA to communicate with the DB
 - [ ] Java API will be RESTful (though HttpSession will be permitted)
 - [ ] Java API will be unit tested using JUnit and Mockito
+- [ ] Java API will will generate documentation with Spring REST Docs 
 
 
 
