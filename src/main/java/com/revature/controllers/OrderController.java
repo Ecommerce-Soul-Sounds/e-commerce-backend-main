@@ -2,11 +2,9 @@ package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
 import com.revature.exceptions.CartErrorException;
-import com.revature.models.Cart;
-import com.revature.models.CartItem;
-import com.revature.models.CustomerOrder;
-import com.revature.models.User;
+import com.revature.models.*;
 import com.revature.services.*;
+import com.revature.util.ClientMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,16 +35,48 @@ public class OrderController {
 
     // purchase all items in the current User's cart
     @Authorized
-	@PostMapping("/purchase")
-	public @ResponseBody String purchase(HttpSession session) {
-		User loggedInUser = (User) session.getAttribute("user");
+    @PostMapping("/purchase")
+    public @ResponseBody ClientMessage purchase(HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
 
-		boolean result = orderService.placeOrder(loggedInUser);
+        List<CartItem> items = orderService.findAllByCart(loggedInUser.getCart());
 
-		if (result) {
-			return "Order placed successfully.";
-		} else {
-			return "Order could not be placed at this time. Please try again.";
-		}
-	}
+        if (items.isEmpty()) {
+            throw new CartErrorException("Cart is Empty");
+        } else {
+            double totalPrice = 0;
+
+            for (CartItem cartItem : items) {
+                totalPrice += cartItem.getProduct().getPrice();
+            }
+
+            CustomerOrder order = new CustomerOrder();
+            order.setCustomer(loggedInUser);
+            order.setAddress(loggedInUser.getAddress());
+            order.setCart(loggedInUser.getCart());
+            order.setTotal(totalPrice);
+
+            order.setOrderPlacedDate(LocalDate.now());
+            order.setStatus(orderService.getStatusByName("pending"));
+
+            if (orderService.create(order) > 0) {
+                // Create and assign a new Cart to the User
+                Cart newCart = new Cart();
+                newCart.setTotalQuantity(0);
+                newCart.setDateModified(LocalDate.now());
+                Cart persistedCart = orderService.createCart(newCart);
+                loggedInUser.setCart(persistedCart);
+                // update new User cart in DB
+                if (orderService.updateUserCart(loggedInUser) > 0) {
+                    return ClientMessageUtil.ORDER_SUBMISSION_SUCCESSFUL;
+                } else {
+                    return ClientMessageUtil.ORDER_SUBMISSION_FAILED;
+                }
+
+            } else {
+                return ClientMessageUtil.ORDER_SUBMISSION_FAILED;
+            }
+        }
+
+    }
 }
