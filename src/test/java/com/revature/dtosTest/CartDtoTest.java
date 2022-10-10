@@ -27,7 +27,7 @@ public class CartDtoTest {
 	@DisplayName("2. Test toString.")
     void testtoString() {
 		CartDTO c1=new CartDTO(1,LocalDate.now(),2);		
-		assertEquals("CartDTO(id=1, dateModified=2022-10-09, totalQuantity=2)", c1.toString());
+		assertEquals("CartDTO(id=1, dateModified=2022-10-10, totalQuantity=2)", c1.toString());
 		}
 	@Test
     @Order(3)

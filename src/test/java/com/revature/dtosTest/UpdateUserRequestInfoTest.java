@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-import com.revature.dtos.ProductInfo;
 import com.revature.dtos.UpdateUserRequestInfo;
 
 public class UpdateUserRequestInfoTest {

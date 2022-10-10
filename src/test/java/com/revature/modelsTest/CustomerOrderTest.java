@@ -45,7 +45,7 @@ public class CustomerOrderTest {
         CustomerOrder co1 = new CustomerOrder(1, u1, a1, c1, 76.87, LocalDate.now(), os1);
 
         assertEquals(
-                "CustomerOrder(id=1, customer=User(id=1, email=jowill@gmail.com, password=jowill, firstName=joel, lastName=will, picture=[0], address=Address(id=1, line1=#5 17th place, line2=3rd Block, city=Chicago, state=Illinois, zipcode=60619), wishlist=Wishlist(id=1, dateModified=2022-10-09), cart=Cart(id=1, dateModified=2022-10-09, totalQuantity=4)), address=Address(id=1, line1=#5 17th place, line2=3rd Block, city=Chicago, state=Illinois, zipcode=60619), cart=Cart(id=1, dateModified=2022-10-09, totalQuantity=4), total=76.87, orderPlacedDate=2022-10-09, status=OrderStatus(id=1, status=In-cart))",
+                "CustomerOrder(id=1, customer=User(id=1, email=jowill@gmail.com, password=jowill, firstName=joel, lastName=will, picture=[0], address=Address(id=1, line1=#5 17th place, line2=3rd Block, city=Chicago, state=Illinois, zipcode=60619), wishlist=Wishlist(id=1, dateModified=2022-10-10), cart=Cart(id=1, dateModified=2022-10-10, totalQuantity=4)), address=Address(id=1, line1=#5 17th place, line2=3rd Block, city=Chicago, state=Illinois, zipcode=60619), cart=Cart(id=1, dateModified=2022-10-10, totalQuantity=4), total=76.87, orderPlacedDate=2022-10-10, status=OrderStatus(id=1, status=In-cart))",
                 co1.toString());
     }
 
