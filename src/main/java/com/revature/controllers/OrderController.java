@@ -26,7 +26,7 @@ public class OrderController {
     public @ResponseBody List<CustomerOrder> getCustomerOrders(@RequestParam(required = false) String status, HttpSession session) {
         User loggedInUser = (User) session.getAttribute("user");
         if (status != null) {
-            return orderService.getCustomerOrdersByStatus(loggedInUser, orderService.getStatusByName(status));
+            return orderService.getCustomerOrdersByStatus(loggedInUser, status);
         } else {
             return orderService.getAllCustomerOrders(loggedInUser);
         }

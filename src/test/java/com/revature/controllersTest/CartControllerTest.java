@@ -1,24 +1,19 @@
-package com.revature.test.controllersTest;
+package com.revature.controllersTest;
 
 import static com.revature.util.ClientMessageUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 
-import com.revature.util.ClientMessageUtil;
+
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,7 +33,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.fasterxml.jackson.datatype.*;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -47,11 +40,14 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.CartController;
 import com.revature.dtos.CartDTO;
+import com.revature.dtos.CartItemDTO;
 import com.revature.models.Cart;
 import com.revature.models.CartItem;
 import com.revature.models.Product;
 import com.revature.models.User;
 import com.revature.services.CartService;
+
+
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CartController.class)
@@ -164,10 +160,9 @@ public class CartControllerTest {
     @DisplayName("3. Get Cart by Id - Happy Path Scenerio Test")
     public void testCartById() throws Exception {
 
-         MockHttpSession session = new MockHttpSession();
-         u1.setCart(cart1);
-         session.setAttribute("user", u1);
-    
+        MockHttpSession session = new MockHttpSession();
+        u1.setCart(cart1);
+        session.setAttribute("user", u1);
 
         when(cartService.findById(cart1.getId())).thenReturn((dummyDb.get(0)));
 
@@ -198,27 +193,28 @@ public class CartControllerTest {
 
     }
 
-//    @Test
-//    @Order(5)
-//    @DisplayName("5. Add CartItem Test")
-//    public void testAddCartItem() throws Exception {
-//
-//        MockHttpSession session = new MockHttpSession();
-//        u1.setCart(cart1);
-//        session.setAttribute("user", u1);
-//
-//        when(cartService.update(u1.getCart())).thenReturn(true);
-//        when(cartService.addCartItem(u1.getCart(), 1, 1)).thenReturn(true);
-//
-//        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/cart/add-item")
-//                .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(1))
-//                .contentType(MediaType.APPLICATION_JSON).session(session);
-//        MvcResult result = mockmvc.perform(request).andReturn();
-//
-//        om.setDateFormat(new SimpleDateFormat());
-//        assertEquals("Item added to Cart", result.getResponse().getContentAsString());
-//
-//    }
+    @Test
+    @Order(5)
+    @DisplayName("5. Add CartItem Test")
+    public void testAddCartItem() throws Exception {
+
+        CartItemDTO newCartItemDTO = new CartItemDTO(1, 1, 1);
+        MockHttpSession session = new MockHttpSession();
+        u1.setCart(cart1);
+        session.setAttribute("user", u1);
+
+        when(cartService.update(u1.getCart())).thenReturn(true);
+        when(cartService.addCartItem(u1.getCart(), 1, 1)).thenReturn(true);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/cart/add-item")
+                .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(newCartItemDTO))
+                .contentType(MediaType.APPLICATION_JSON).session(session);
+        MvcResult result = mockmvc.perform(request).andReturn();
+
+        om.setDateFormat(new SimpleDateFormat());
+        assertEquals("Item added to Cart", result.getResponse().getContentAsString());
+
+    }
 
     @Test
     @Order(6)
@@ -249,7 +245,6 @@ public class CartControllerTest {
         u1.setCart(cart1);
         session.setAttribute("user", u1);
 
-
         when(cartService.getCartItemsByCartId(u1.getId())).thenReturn(mockCartItemsList);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/api/cart/items")
@@ -257,6 +252,38 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).session(session);
         MvcResult result = mockmvc.perform(request).andReturn();
 
+        om.setDateFormat(new SimpleDateFormat());
+        assertEquals(om.writeValueAsString(mockCartItemsList), result.getResponse().getContentAsString());
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("8. Update Cart Test")
+    public void testUpdateCart() throws Exception {
+        u1.setCart(cart1);
+
+        when(cartService.update(u1.getCart())).thenReturn(true);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/api/cart/update-cart")
+                .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(mockCart1))
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockmvc.perform(request).andReturn();
+
+        om.setDateFormat(new SimpleDateFormat());
+        assertEquals(om.writeValueAsString(UPDATE_SUCCESSFUL), result.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    @Order(9)
+    @DisplayName("9. Test get previous order cart items")
+    public void testgetPreviousOrderCartItems() throws Exception {
+        u1.setCart(cart1);
+
+        when(cartService.getCartItemsByCartId(u1.getCart().getId())).thenReturn(mockCartItemsList);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/api/cart/order-items?cartId=1")
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockmvc.perform(request).andReturn();
         om.setDateFormat(new SimpleDateFormat());
         assertEquals(om.writeValueAsString(mockCartItemsList), result.getResponse().getContentAsString());
     }

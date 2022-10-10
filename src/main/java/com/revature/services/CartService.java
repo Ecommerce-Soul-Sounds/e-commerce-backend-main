@@ -25,9 +25,10 @@ public class CartService {
     @Autowired
     private ProductRepository productRepo;
 
-    public CartService(CartRepository cartRepo, CartItemRepository cartItemRepo) {
+    public CartService(CartRepository cartRepo, CartItemRepository cartItemRepo, ProductRepository productRepo) {
         this.cartRepo = cartRepo;
         this.cartItemRepo = cartItemRepo;
+        this.productRepo = productRepo;
     }
 
     public Cart create(Cart cart) {
@@ -86,7 +87,7 @@ public class CartService {
         return false;
     }
 
-    private boolean saveNewCartItem(Cart cart, int productId, int quantity) {
+    public boolean saveNewCartItem(Cart cart, int productId, int quantity) {
         CartItem item = new CartItem();
 
         Optional<Product> product = productRepo.findById(productId);

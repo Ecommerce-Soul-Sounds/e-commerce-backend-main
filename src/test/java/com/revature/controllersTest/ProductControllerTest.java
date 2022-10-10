@@ -1,4 +1,4 @@
-package com.revature.test.controllersTest;
+package com.revature.controllersTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -118,7 +118,7 @@ public class ProductControllerTest {
         int id = 3;
         Product newProduct = new Product(id,3, 3.00, "cat3", "brand3", "desc", "image3", "name3");
         
-        doNothing().when(productService).delete(id);
+        when(productService.delete(newProduct)).thenReturn(true);
         when(productService.findById(id)).thenReturn(Optional.of(newProduct));
         
              

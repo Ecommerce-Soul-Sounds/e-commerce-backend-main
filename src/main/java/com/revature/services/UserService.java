@@ -4,6 +4,8 @@ import com.revature.models.Address;
 import com.revature.models.User;
 import com.revature.repositories.UserAddressRepository;
 import com.revature.repositories.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,8 +13,10 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final UserAddressRepository userAddressRepository;
+    @Autowired
+    private  UserRepository userRepository;
+    @Autowired
+    private  UserAddressRepository userAddressRepository;
 
     public UserService(UserRepository userRepository, UserAddressRepository userAddressRepository) {
 		super();
