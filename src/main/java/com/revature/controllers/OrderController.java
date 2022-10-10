@@ -28,7 +28,7 @@ public class OrderController {
     public @ResponseBody List<CustomerOrder> getCustomerOrders(@RequestParam(required = false) String status, HttpSession session) {
         User loggedInUser = (User) session.getAttribute("user");
         if (status != null) {
-            return orderService.getCustomerOrdersByStatus(loggedInUser, orderService.getStatusByName(status));
+            return orderService.getCustomerOrdersByStatus(loggedInUser, status);
         } else {
             return orderService.getAllCustomerOrders(loggedInUser);
         }
@@ -37,48 +37,16 @@ public class OrderController {
 
     // purchase all items in the current User's cart
     @Authorized
-    @PostMapping("/purchase")
-    public @ResponseBody String purchase(HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("user");
+	@PostMapping("/purchase")
+	public @ResponseBody String purchase(HttpSession session) {
+		User loggedInUser = (User) session.getAttribute("user");
 
-        List<CartItem> items = orderService.findAllByCart(loggedInUser.getCart());
+		boolean result = orderService.placeOrder(loggedInUser);
 
-        if (items.isEmpty()) {
-            throw new CartErrorException("Cart is Empty");
-        } else {
-            double totalPrice = 0;
-
-            for (CartItem cartItem : items) {
-                totalPrice += cartItem.getProduct().getPrice();
-            }
-
-            CustomerOrder order = new CustomerOrder();
-            order.setCustomer(loggedInUser);
-            order.setAddress(loggedInUser.getAddress());
-            order.setCart(loggedInUser.getCart());
-            order.setTotal(totalPrice);
-
-            order.setOrderPlacedDate(LocalDate.now());
-            order.setStatus(orderService.getStatusByName("pending"));
-
-            if (orderService.create(order) > 0) {
-                // Create and assign a new Cart to the User
-                Cart newCart = new Cart();
-                newCart.setTotalQuantity(0);
-                newCart.setDateModified(LocalDate.now());
-                Cart persistedCart = orderService.createCart(newCart);
-                loggedInUser.setCart(persistedCart);
-                // update new User cart in DB
-                if (orderService.updateUserCart(loggedInUser) > 0) {
-                    return "Order placed successfully.";
-                } else {
-                    return "Order could not be placed at this time. Please try again.";
-                }
-
-            } else {
-                return "Order could not be placed at this time. Please try again.";
-            }
-        }
-
-    }
+		if (result) {
+			return "Order placed successfully.";
+		} else {
+			return "Order could not be placed at this time. Please try again.";
+		}
+	}
 }
