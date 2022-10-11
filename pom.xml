@@ -97,29 +97,18 @@
 				<version>0.8.6</version>
 				<executions>
 					<execution>
-<<<<<<< HEAD
-						<id>jacoco-initialize</id>
-=======
 						<id>prepare-agent</id>
->>>>>>> 542282b72f0086f81449080550a735d73109903d
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
-<<<<<<< HEAD
-						<id>jacoco-site</id>
-						<phase>package</phase>
-=======
 						<id>report</id>
 						<phase>prepare-package</phase>
->>>>>>> 542282b72f0086f81449080550a735d73109903d
 						<goals>
 							<goal>report</goal>
 						</goals>
 					</execution>
-<<<<<<< HEAD
-=======
 					<execution>
 						<id>post-unit-test</id>
 						<phase>test</phase>
@@ -153,7 +142,6 @@
 							<goal>generate</goal>
 						</goals>
 					</execution>
->>>>>>> 542282b72f0086f81449080550a735d73109903d
 				</executions>
 			</plugin>
 		</plugins>
