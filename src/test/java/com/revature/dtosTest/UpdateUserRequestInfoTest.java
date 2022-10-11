@@ -17,8 +17,7 @@ public class UpdateUserRequestInfoTest {
     @DisplayName("1. Test equals and Hashcode.")
     void testequals() {
         UpdateUserRequestInfo u1 = new UpdateUserRequestInfo("tech@tech.com", "Password", "Name", "Last", "Street",
-                "Apt1", "City", "State", 9897,
-                new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes()));
+                "Apt1", "City", "State", 9897);
         // UpdateUserRequestInfo u2=new
         // UpdateUserRequestInfo("tech@tech.com","Password","Name","Last","Street","Apt1","City","State",9897,new
         // MockMultipartFile( "file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello,
@@ -53,8 +52,8 @@ public class UpdateUserRequestInfoTest {
         u1.setFirstName("Name");
         u1.setLastName("Last");
         u1.setPassword("Password");
-        u1.setPicture(
-                new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes()));
+//        u1.setPicture(
+//                new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes()));
         u1.setState("State");
         u1.setStreet_address("Address");
         u1.setZipcode(6787);
