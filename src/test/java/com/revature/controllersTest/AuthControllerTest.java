@@ -78,13 +78,13 @@ class AuthControllerTest {
 		LoginRequest body = new LoginRequest(email, password);
 
 		when(mockAuthService.findByCredentials(email, password)).thenReturn(Optional.of(user1));
-
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/auth/login")
-				.accept(MediaType.APPLICATION_JSON_VALUE)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(om.writeValueAsString(body))
-				.session(session);
-
+	
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/api/orders/all")
+													.accept(MediaType.APPLICATION_JSON_VALUE)
+													.contentType(MediaType.APPLICATION_JSON)
+													.content(om.writeValueAsString(body))
+													.session(session);
+		
 		mockmvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk());
 
 		assertEquals(user1, (User) session.getAttribute("user"));

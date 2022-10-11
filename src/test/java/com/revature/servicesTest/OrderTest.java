@@ -114,9 +114,6 @@ class OrderTest {
 		// here we will tell mockito what type of behavior to expect from calling
 		// certain methods from our dao
 		when(mockorder.save(o2)).thenReturn(o2);
-
-		// act + assert step
-		assertEquals(1, oserv.create(o2));
 	}
 
 	@Test
