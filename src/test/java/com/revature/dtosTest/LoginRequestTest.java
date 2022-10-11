@@ -34,7 +34,7 @@ public class LoginRequestTest {
     @Order(3)
     @DisplayName("3. Test Setters.")
     void testsetter() {
-        LoginRequest lr2 = new LoginRequest("jowill@gmail.com", "jwill");
+        LoginRequest lr2 = new LoginRequest();
         lr2.setEmail("tech@gmail.com");
         lr2.setPassword("Tech");
         assertTrue(lr2.getEmail() == "tech@gmail.com");
