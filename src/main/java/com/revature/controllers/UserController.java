@@ -31,7 +31,7 @@ public class UserController {
     @Authorized
     @PutMapping(value = "/update")
     @CrossOrigin(methods = RequestMethod.PUT)
-    public @ResponseBody User updateUser(@RequestPart(name = "userUpdateInfo", required = false) UpdateUserRequestInfo userUpdateInfo, @RequestPart(value = "picture", required = false) @Valid @NotNull MultipartFile picture, HttpServletRequest request) throws IOException, ServletException {
+    public @ResponseBody ClientMessage updateUser(@RequestPart(name = "userUpdateInfo", required = false) UpdateUserRequestInfo userUpdateInfo, @RequestPart(value = "picture", required = false) @Valid @NotNull MultipartFile picture, HttpServletRequest request) throws IOException, ServletException {
 
         System.out.println(userUpdateInfo);
 
@@ -65,7 +65,7 @@ public class UserController {
         }
 
         if (userService.updateUser(loggedInUser) > 0) {
-            return loggedInUser;
+            return ClientMessageUtil.UPDATE_SUCCESSFUL;
         } else {
             throw new UpdateUserException("User could not be updated at this time. Please try again.");
         }
