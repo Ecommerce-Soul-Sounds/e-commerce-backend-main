@@ -38,7 +38,7 @@ public class WishlistitemTest {
                 new Wishlist(1, LocalDate.now()));
 
         assertEquals(
-                "WishlistItem(id=1, product=Product(id=1, quantity=3, price=457.76, category=Piano, brand=Casio, description=PSRE423, image=Image, name=Casio PsrE423), wishlist=Wishlist(id=1, dateModified=2022-10-10))",
+                "WishlistItem(id=1, product=Product(id=1, quantity=3, price=457.76, category=Piano, brand=Casio, description=PSRE423, image=Image, name=Casio PsrE423), wishlist=Wishlist(id=1,"+" dateModified="+LocalDate.now()+"))",
                 wli1.toString());
     }
 
