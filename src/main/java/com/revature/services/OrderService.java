@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.revature.models.User;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.revature.exceptions.CartErrorException;
 import com.revature.models.Cart;
 import com.revature.models.CartItem;
 import com.revature.models.CustomerOrder;
@@ -25,7 +27,7 @@ public class OrderService {
 	private CartRepository cartRepository;
 	private CartItemRepository cartitemrepository;
 	private UserRepository userrepository;
-	
+
 	public OrderService(OrderRepository orderRepository, CartRepository cartRepository,
 			CartItemRepository cartitemrepository, UserRepository userrepository,
 			OrderStatusRepository orderStatusRepository) {
@@ -36,6 +38,7 @@ public class OrderService {
 		this.userrepository = userrepository;
 		this.orderStatusRepository = orderStatusRepository;
 	}
+
 	private OrderStatusRepository orderStatusRepository;
 
 	public int create(CustomerOrder order) {
@@ -56,33 +59,72 @@ public class OrderService {
 
 	}
 
-
 	public OrderStatus getStatusByName(String status) {
 		return orderStatusRepository.getOrderStatusByStatusName(status);
 	}
 
-	public Cart createcart(Cart cart) {
+	public Cart createCart(Cart cart) {
 		return cartRepository.save(cart);
 	}
 
 	public int updateUserCart(User user) {
-		return userrepository.updateUserCart(user.getId(), user.getCart().getId());
+		return userrepository.updateUserCart(user.getCart().getId(), user.getId());
 	}
 
-	public List<CustomerOrder> getCustomerOrdersByStatus(User customer, OrderStatus status) {
+	public List<CustomerOrder> getCustomerOrdersByStatus(User customer, String statusName) {
+		OrderStatus status = orderStatusRepository.getOrderStatusByStatusName(statusName);
 		return orderRepository.findCustomerOrdersByStatus(customer.getId(), status.getId());
 	}
 
 	public CustomerOrder findByOrderID(int orderId) {
 		return orderRepository.findByOrderID(orderId);
 	}
-	
+
 	public boolean updatestatus(OrderStatus orderStatus, CustomerOrder orderId) {
 		return orderRepository.updatestatus(orderStatus.getId(), orderId.getId());
 	}
-	
+
 	public boolean delete(CustomerOrder order) {
 		orderRepository.delete(order);
 		return true;
+	}
+
+	public boolean placeOrder(User loggedInUser) {
+		List<CartItem> items = cartitemrepository.getCartItemsByCartId(loggedInUser.getCart().getId());
+
+		if (items.isEmpty()) {
+			throw new CartErrorException("Cart is Empty");
+		} else {
+			double totalPrice = 0;
+
+			for (CartItem cartItem : items) {
+				totalPrice += cartItem.getProduct().getPrice();
+			}
+
+			CustomerOrder order = new CustomerOrder();
+			order.setCustomer(loggedInUser);
+			order.setAddress(loggedInUser.getAddress());
+			order.setCart(loggedInUser.getCart());
+			order.setTotal(totalPrice);
+
+			order.setOrderPlacedDate(LocalDate.now());
+			order.setStatus(orderStatusRepository.getOrderStatusByStatusName("pending"));
+
+			if (orderRepository.save(order) != null) {
+				// Create and assign a new Cart to the User
+				Cart newCart = new Cart();
+				newCart.setTotalQuantity(0);
+				newCart.setDateModified(LocalDate.now());
+				Cart persistedCart = cartRepository.save(newCart);
+				loggedInUser.setCart(persistedCart);
+				userrepository.save(loggedInUser);
+				// update new User cart in DB
+
+				return true;
+			}
+
+			return false;
+
+		}
 	}
 }

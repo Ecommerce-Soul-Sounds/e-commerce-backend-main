@@ -9,6 +9,8 @@ public class ClientMessageUtil {
 
 	public static final ClientMessage CREATION_SUCCESSFUL = new ClientMessage("CREATION SUCCESSFUL");
 	public static final ClientMessage CREATION_FAILED = new ClientMessage("SOMETHING WENT WRONG DURING CREATION");
+	public static final ClientMessage ORDER_SUBMISSION_SUCCESSFUL = new ClientMessage("ORDER PLACED SUCCESSFULLY");
+	public static final ClientMessage ORDER_SUBMISSION_FAILED = new ClientMessage("ORDER COULD NOT BE PLACED AT THIS TIME. PLEASE TRY AGAIN.");
 	public static final ClientMessage UPDATE_SUCCESSFUL = new ClientMessage("UPDATE SUCCESSFUL");
 	public static final ClientMessage UPDATE_FAILED = new ClientMessage("SOMETHING WENT WRONG DURING UPDATE");
 	public static final ClientMessage DELETION_SUCCESSFUL = new ClientMessage("DELETION SUCCESSFUL");

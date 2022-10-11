@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,12 +47,6 @@ class WishlistServiceTest {
     
     @BeforeAll
     static void setupBeforeClass() {
-        mockWishlistDao = Mockito.mock(WishlistRepository.class);
-        mockWishlistItemDao = Mockito.mock(WishlistItemRepository.class);
-        mockProductDao = Mockito.mock(ProductRepository.class);
-        
-        wishlistService = new WishlistService();
-
         wishlist1 = new Wishlist(1, LocalDate.now());
         product1 = new Product(1, 10, 100, "Instrument", "TrumpetsRUs", "A Trumpet", null, "Trumpet");
         item1 = new WishlistItem(1, product1, wishlist1);
@@ -131,5 +126,12 @@ class WishlistServiceTest {
     	list.add(item1);
     	when(mockWishlistItemDao.getWishlistItemsByWishlistID(1)).thenReturn(list);
     	assertEquals(list , wishlistService.getWishlistItemsByWishlist(wishlist1));
+    }
+    @Test
+    @Order(8)
+    @DisplayName("8. Test delete wishlist")
+    void testDeleteWishlist() {
+        doNothing().when(mockWishlistDao).delete(wishlist1);
+        assertEquals(true, wishlistService.deleteWishlist(wishlist1));
     }
 }

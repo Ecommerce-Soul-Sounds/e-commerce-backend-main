@@ -37,7 +37,7 @@ public class CustomerOrder {
 	@JoinColumn(name = "address_id", referencedColumnName = "address_id")
 	private Address address;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
 	private Cart cart;
 	
