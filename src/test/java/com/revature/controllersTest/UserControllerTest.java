@@ -90,7 +90,7 @@ public class UserControllerTest {
 	        MediaType.TEXT_PLAIN_VALUE, 
 	        "Hello, World!".getBytes()
 	      );
-		usri= new UpdateUserRequestInfo("jowill@gmail.com","jowill","joel","will", "#5 17th place", "APT 1", "Chicago", "Illinois", 60543,file);
+		usri= new UpdateUserRequestInfo("jowill@gmail.com","jowill","joel","will", "#5 17th place", "APT 1", "Chicago", "Illinois", 60543);
 }
 	@Test
 	@Order(1)

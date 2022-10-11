@@ -19,5 +19,4 @@ public class UpdateUserRequestInfo {
     private String city;
     private String state;
     private int zipcode;
-    private MultipartFile picture;
 }

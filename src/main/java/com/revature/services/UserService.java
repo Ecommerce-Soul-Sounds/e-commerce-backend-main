@@ -56,7 +56,7 @@ public class UserService {
         target.setLine2(address.getLine2());
         target.setCity(address.getCity());
         target.setState(address.getState());
-        target.setZipcode(address.getId());
+        target.setZipcode(address.getZipcode());
 		target.setId(address.getId());
 		
         return userAddressRepository.save(target) != null;
