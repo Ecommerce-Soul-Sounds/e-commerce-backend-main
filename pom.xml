@@ -69,10 +69,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.6</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.11</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -96,18 +97,63 @@
 				<version>0.8.6</version>
 				<executions>
 					<execution>
+<<<<<<< HEAD
 						<id>jacoco-initialize</id>
+=======
+						<id>prepare-agent</id>
+>>>>>>> 542282b72f0086f81449080550a735d73109903d
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
+<<<<<<< HEAD
 						<id>jacoco-site</id>
 						<phase>package</phase>
+=======
+						<id>report</id>
+						<phase>prepare-package</phase>
+>>>>>>> 542282b72f0086f81449080550a735d73109903d
 						<goals>
 							<goal>report</goal>
 						</goals>
 					</execution>
+<<<<<<< HEAD
+=======
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<!-- Sets the path to the file which contains the execution data. -->
+
+							<dataFile>target/jacoco.exec</dataFile>
+							<!-- Sets the output directory for the code coverage report. -->
+							<outputDirectory>target/my-reports</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${project.parent.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-maven-plugin</artifactId>
+				<version>0.2</version>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+>>>>>>> 542282b72f0086f81449080550a735d73109903d
 				</executions>
 			</plugin>
 		</plugins>

@@ -87,7 +87,46 @@ public class OrderService {
 				loggedInUser.setCart(persistedCart);
 				userRepo.save(loggedInUser);
 				// update new User cart in DB
-				
+
+				return true;
+			}
+
+			return false;
+
+		}
+	}
+
+	public boolean placeOrder(User loggedInUser) {
+		List<CartItem> items = cartitemrepository.getCartItemsByCartId(loggedInUser.getCart().getId());
+
+		if (items.isEmpty()) {
+			throw new CartErrorException("Cart is Empty");
+		} else {
+			double totalPrice = 0;
+
+			for (CartItem cartItem : items) {
+				totalPrice += cartItem.getProduct().getPrice();
+			}
+
+			CustomerOrder order = new CustomerOrder();
+			order.setCustomer(loggedInUser);
+			order.setAddress(loggedInUser.getAddress());
+			order.setCart(loggedInUser.getCart());
+			order.setTotal(totalPrice);
+
+			order.setOrderPlacedDate(LocalDate.now());
+			order.setStatus(orderStatusRepository.getOrderStatusByStatusName("pending"));
+
+			if (orderRepository.save(order) != null) {
+				// Create and assign a new Cart to the User
+				Cart newCart = new Cart();
+				newCart.setTotalQuantity(0);
+				newCart.setDateModified(LocalDate.now());
+				Cart persistedCart = cartRepository.save(newCart);
+				loggedInUser.setCart(persistedCart);
+				userrepository.save(loggedInUser);
+				// update new User cart in DB
+
 				return true;
 			}
 
