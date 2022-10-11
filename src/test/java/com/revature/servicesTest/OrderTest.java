@@ -100,25 +100,7 @@ class OrderTest {
 
 	@Test
 	@Order(2)
-	@DisplayName("2. Create Order Test")
-	void testCreateOrder() {
-		// arrange step
-		LocalDate date = LocalDate.parse("2022-09-28");
-		a2 = new Address(2, "#11 18th Street", "5th Block", "Chicago", "Illinois", 60656);
-		w2 = new Wishlist(2, date);
-		c2 = new Cart(2, date, 3);
-		os2 = new OrderStatus(2, "Paid");
-		u2 = new User(2, "dota2@gmail.com", "dota2", "Phantom", "assassin", new byte[8], a2, w2, c2);
-		o2 = new CustomerOrder(2, u2, a2, c2, 45.87, date, os2);
-
-		// here we will tell mockito what type of behavior to expect from calling
-		// certain methods from our dao
-		when(mockorder.save(o2)).thenReturn(o2);
-	}
-
-	@Test
-	@Order(3)
-	@DisplayName("3. Get all order list")
+	@DisplayName("2. Get all order list")
 	void testGetAllOrderList() {
 
 		when(oserv.findAll()).thenReturn(dummydb);
@@ -127,85 +109,18 @@ class OrderTest {
 	}
 
 	@Test
-	@Order(4)
-	@DisplayName("4. Get Order By Id")
+	@Order(3)
+	@DisplayName("3. Get Order By Id")
 	void testGetOrderById() {
 
 		when(oserv.findByOrderID(1)).thenReturn(o1);
 		assertEquals(o1, oserv.findByOrderID(1));
 
 	}
-
-	@Test
-	@Order(5)
-	@DisplayName("5. Update Order status")
-	void testUpdateOrderStatus() {
-
-		o1.setStatus(new OrderStatus(3, "Removed"));
-
-		when(oserv.updatestatus(os1, o1)).thenReturn(true);
-
-		assertEquals(true, oserv.updatestatus(os1, o1));
-
-	}
-
-	@Test
-	@Order(6)
-	@DisplayName("6. Delete order")
-	void testDeleteJobListing() {
-		doNothing().when(mockorder).delete(o1);
-		// act + assert step
-		assertEquals(true, oserv.delete(o1));
-
-	}
-
-	@Test
-	@Order(7)
-	@DisplayName("7. Get all order list")
-	void testGetAllCartByCartId() {
-
-		when(oserv.findAllByCart(c1)).thenReturn(cartitemdb);
-		assertEquals(cartitemdb, oserv.findAllByCart(c1));
-
-	}
-
-	@Test
-	@Order(8)
-	@DisplayName("8. Get Order Status By Status Name")
-	void testgetOrderStatusByName() {
-
-        when(oserv.getStatusByName("In-Review")).thenReturn(os1);
-		//when(mockdao.save(o1)).thenReturn(o1);
 		
-		assertEquals(os1, oserv.getStatusByName("In-Review"));
-
-    }
-
 	@Test
-	@Order(9)
-	@DisplayName("9. Create Cart")
-	void testCreateCart () {
-
-        when(oserv.createCart(c1)).thenReturn(c1);
-		//when(mockdao.save(o1)).thenReturn(o1);
-		
-		assertEquals(c1, oserv.createCart(c1));
-
-    }
-
-	@Test
-	    @Order(10)
-	    @DisplayName("10. Update User Cart")
-	    void testUpdateUserCart() {
-
-	        when(oserv.updateUserCart(u1)).thenReturn(c1.getId());
-
-	        assertEquals(u1.getCart().getId(), oserv.updateUserCart(u1));
-	    }
-
-	@Test
-	    @Order(11)
-	    @DisplayName("11. Get Customer Order By Status Name")
+	    @Order(4)
+	    @DisplayName("4. Get Customer Order By Status Name")
 	    void testGetCustomerOrderByStatusName() {
 			when(mockorderstatus.getOrderStatusByStatusName(os1.getStatus())).thenReturn(os1);
 	        when(oserv.getCustomerOrdersByStatus(u1,os1.getStatus())).thenReturn(dummydb);
@@ -214,8 +129,8 @@ class OrderTest {
 	    }
 
 	@Test
-	    @Order(12)
-	    @DisplayName("12. Get All Customer Order By Customer Id")
+	    @Order(5)
+	    @DisplayName("5. Get All Customer Order By Customer Id")
 	    void testGetAllCustomerOrderByCustomerId() {
 
 	        when(oserv.getAllCustomerOrders(u1)).thenReturn(dummydb);
@@ -224,29 +139,8 @@ class OrderTest {
 	    }
 
 	@Test
-	@Order(13)
-	@DisplayName("13. Create Order Fail Test")
-	void testFailCreateOrder() {
-		// arrange step
-		LocalDate date = LocalDate.parse("2022-09-28");
-		a2 = new Address(1, "#11 18th Street", "5th Block", "Chicago", "Illinois", 60656);
-		w2 = new Wishlist(0, date);
-		c2 = new Cart(0, date, 0);
-		os2 = new OrderStatus(0, "Empty");
-		u2 = new User(0, "dota2@gmail.com", "dota2", "Phantom", "assassin", new byte[8], a2, w2, c2);
-		o2 = new CustomerOrder(0, u2, a2, c2, 45.87, date, os2);
-
-		// here we will tell mockito what type of behavior to expect from calling
-		// certain methods from our dao
-		when(mockorder.save(o2)).thenReturn(o2);
-
-		// act + assert step
-		assertEquals(0, oserv.create(o2));
-	}
-
-	@Test
-	@Order(13)
-	@DisplayName("13. Test place order.")
+	@Order(6)
+	@DisplayName("6. Test place order.")
 	void testPlaceOrder() {
 		CustomerOrder newOrder = new CustomerOrder(0, u1, a1, c1, 457.76, LocalDate.now(), null);
 		when(mockcartitem.getCartItemsByCartId(u1.getCart().getId())).thenReturn(cartitemdb);
