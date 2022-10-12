@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = {"*"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://soulsounds.s3-website-us-west-2.amazonaws.com"}}, allowCredentials = "true")
 public class AuthController {
 
     private final AuthService authService;

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/wishlist")
-@CrossOrigin(origins = {"*" }, allowCredentials = "true")
+@CrossOrigin(origins = {"http://soulsounds.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
 public class WishlistController {
 
 	@Autowired

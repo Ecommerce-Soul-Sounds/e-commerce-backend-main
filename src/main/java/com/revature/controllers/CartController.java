@@ -22,7 +22,7 @@ import com.revature.services.CartService;
 
 @RestController
 @RequestMapping("api/cart")
-@CrossOrigin(origins = { "*"}, allowCredentials = "true")
+@CrossOrigin(origins = { "http://soulsounds.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
 public class CartController {
     @Autowired
     private CartService cartService;
