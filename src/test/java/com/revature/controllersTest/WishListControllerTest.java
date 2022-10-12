@@ -154,26 +154,26 @@ public class WishListControllerTest {
 
     }
 
-    @Test
-    @Order(4)
-    @DisplayName("4. Delete wishlist item")
-    void testDeleteWishlistItem() throws Exception {
-        Cart cart1 = new Cart(1, LocalDate.now(), 1);
-        Address addy = new Address(1, "line1", "line2", "city", "state", 00000);
-        User user = new User(1, "user1", "email", "first", "last", new byte[1024], addy, mockWishlist1, cart1);
+    // @Test
+    // @Order(4)
+    // @DisplayName("4. Delete wishlist item")
+    // void testDeleteWishlistItem() throws Exception {
+    //     Cart cart1 = new Cart(1, LocalDate.now(), 1);
+    //     Address addy = new Address(1, "line1", "line2", "city", "state", 00000);
+    //     User user = new User(1, "user1", "email", "first", "last", new byte[1024], addy, mockWishlist1, cart1);
 
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("user", user);
+    //     MockHttpSession session = new MockHttpSession();
+    //     session.setAttribute("user", user);
 
-        when(wishlistService.deleteWishlistItem(mockWishlist1, mockProduct1.getId())).thenReturn((true));
-        RequestBuilder request = MockMvcRequestBuilders.delete("/api/wishlist/delete-item")
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(om.writeValueAsString(mockProduct1.getId()))
-                .contentType(MediaType.APPLICATION_JSON).session(session);
-        MvcResult result = mockmvc.perform(request).andReturn();
-        assertEquals(("Item successfully removed from your wishlist."), result.getResponse().getContentAsString());
+    //     when(wishlistService.deleteWishlistItem(mockWishlist1, mockProduct1.getId())).thenReturn((true));
+    //     RequestBuilder request = MockMvcRequestBuilders.delete("/api/wishlist/delete-item")
+    //             .accept(MediaType.APPLICATION_JSON_VALUE)
+    //             .content(om.writeValueAsString(mockProduct1.getId()))
+    //             .contentType(MediaType.APPLICATION_JSON).session(session);
+    //     MvcResult result = mockmvc.perform(request).andReturn();
+    //     assertEquals((om.writeValueAsString([])), result.getResponse().getContentAsString());
 
-    }
+    // }
 
     @Test
     @Order(5)
