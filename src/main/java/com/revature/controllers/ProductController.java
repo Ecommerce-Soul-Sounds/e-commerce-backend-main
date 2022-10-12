@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/product")
-@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:3000" }, allowCredentials = "true")
+@CrossOrigin(origins = { "http://soulsounds.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
 public class ProductController {
 
     private final ProductService productService;
