@@ -212,7 +212,7 @@ public class CartControllerTest {
         MvcResult result = mockmvc.perform(request).andReturn();
 
         om.setDateFormat(new SimpleDateFormat());
-        assertEquals("Item added to Cart", result.getResponse().getContentAsString());
+        assertEquals(om.writeValueAsString(ADD_CART_ITEM_SUCCESSFUL), result.getResponse().getContentAsString());
 
     }
 
@@ -220,7 +220,7 @@ public class CartControllerTest {
     @Order(6)
     @DisplayName("6. Delete CartItem Test")
     public void testDeleteCartItem() throws Exception {
-
+    	CartItemDTO newCartItemDTO = new CartItemDTO(1, 1, 1);
         MockHttpSession session = new MockHttpSession();
         u1.setCart(cart1);
         session.setAttribute("user", u1);
@@ -228,12 +228,12 @@ public class CartControllerTest {
         when(cartService.deleteCartItem(u1.getCart(), 1, 1)).thenReturn(true);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/api/cart/delete-item")
-                .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(1))
+                .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(newCartItemDTO))
                 .contentType(MediaType.APPLICATION_JSON).session(session);
         MvcResult result = mockmvc.perform(request).andReturn();
 
         om.setDateFormat(new SimpleDateFormat());
-        assertEquals("Item successfully removed from your Cart.", result.getResponse().getContentAsString());
+        assertEquals(om.writeValueAsString(DELETION_SUCCESSFUL), result.getResponse().getContentAsString());
 
     }
 
