@@ -52,6 +52,12 @@ public class WishlistService {
 		Optional<Product> product = productRepo.findById(productId);
 		
 		if (product.isPresent()) {
+			List<WishlistItem> currentWishlist = wishlistItemRepo.getWishlistItemsByWishlistID(wishlist.getId());
+			for (WishlistItem wItem: currentWishlist) {
+				if (wItem.getProduct().getId() == productId) {
+					return false;
+				}
+			}
 			item.setProduct(product.get());
 			item.setWishlist(wishlist);
 			return wishlistItemRepo.save(item) != null;

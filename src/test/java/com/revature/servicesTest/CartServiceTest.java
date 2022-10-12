@@ -192,7 +192,7 @@ class CartServiceTest {
         item.setCart(cart1);
         item.setProduct(product1);
         when(mockProductDao.findById(1)).thenReturn(Optional.of(product1));
-        assertEquals(true, cartServ.deleteCartItem(cart1, 1));
+        assertEquals(true, cartServ.deleteCartItem(cart1, 1, 1));
     }
 
 }

@@ -25,6 +25,9 @@ public class CartService {
     @Autowired
     private ProductRepository productRepo;
 
+    @Autowired
+    private UserService userService;
+
     public CartService(CartRepository cartRepo, CartItemRepository cartItemRepo, ProductRepository productRepo) {
         this.cartRepo = cartRepo;
         this.cartItemRepo = cartItemRepo;
@@ -40,7 +43,13 @@ public class CartService {
     }
 
     public Cart findById(int id) {
-        return cartRepo.getById(id);
+        Optional<Cart> cart = cartRepo.findById(id);
+        if (cart.isPresent()) {
+            return cart.get();
+        } else {
+            return null;
+        }
+//        return cartRepo.findById(id);
     }
 
     public boolean update(Cart cart) {
@@ -64,9 +73,14 @@ public class CartService {
 
     public boolean addCartItem(Cart cart, int productId, int quantity) {
         List<CartItem> currentCartItems = cartItemRepo.getCartItemsByCartId(cart.getId());
+        cart = cartRepo.findById(cart.getId()).get();
+
         if (currentCartItems.isEmpty()) {
-            if (saveNewCartItem(cart, productId, quantity))
+
+            if (saveNewCartItem(cart, productId, quantity)) {
                 return cartRepo.updateCart(LocalDate.now(), cart.getTotalQuantity(), cart.getId()) > 0;
+            }
+
         } else {
             for (CartItem cartItem : currentCartItems) {
                 if (cartItem.getProduct().getId() == productId) {
@@ -88,6 +102,7 @@ public class CartService {
     }
 
     public boolean saveNewCartItem(Cart cart, int productId, int quantity) {
+        System.out.println("Cart Quantity: " + cart.getTotalQuantity());
         CartItem item = new CartItem();
 
         Optional<Product> product = productRepo.findById(productId);
@@ -100,25 +115,59 @@ public class CartService {
 
             int currCartQuantity = cart.getTotalQuantity();
             cart.setTotalQuantity(currCartQuantity + item.getQuantity());
-
+            cart.setDateModified(LocalDate.now());
+            update(cart);
             return true;
         }
         return false;
     }
 
-    public boolean deleteCartItem(Cart cart, int productId) {
-        CartItem item = new CartItem();
+    public boolean deleteCartItem(Cart cart, int cartItemId, int deleteQuantity) {
+//        CartItem item = new CartItem();
+//
+//        Optional<Product> product = productRepo.findById(productId);
+//
+//        if (product.isPresent()) {
+//            item.setProduct(product.get());
+//            item.setCart(cart);
+//            cartItemRepo.delete(item);
+//            return true;
+//        }
+//
+//        return false;
 
-        Optional<Product> product = productRepo.findById(productId);
+        Optional<CartItem> cartItem = cartItemRepo.findById(cartItemId);
 
-        if (product.isPresent()) {
-            item.setProduct(product.get());
-            item.setCart(cart);
-            cartItemRepo.delete(item);
+        if (cartItem.isPresent()) {
+            int currentQuantity = cartItem.get().getQuantity();
+
+            System.out.println("Cart Item Quantity: " + currentQuantity);
+            System.out.println("Delete Quantity: " + deleteQuantity);
+            if (currentQuantity > deleteQuantity) {
+                cart.setTotalQuantity(cart.getTotalQuantity() - 1);
+                cart.setDateModified(LocalDate.now());
+                update(cart);
+                cartItemRepo.updateItem(currentQuantity - 1, cartItemId);
+
+            } else {
+                cart.setTotalQuantity(cart.getTotalQuantity() - cartItem.get().getQuantity());
+                cart.setDateModified(LocalDate.now());
+                update(cart);
+                cartItemRepo.delete(cartItem.get());
+            }
+
             return true;
+        } else {
+            return false;
         }
+    }
 
-        return false;
+    public void emptyCart(int cartId) {
+        List<CartItem> cartItems = cartItemRepo.getCartItemsByCartId(cartId);
+        cartItemRepo.deleteAll(cartItems);
+        cartRepo.updateCart(cartRepo.findById(cartId).get().getDateModified(), 0, cartId);
+        System.out.println("User Cart" + cartRepo.findById(cartId));
+        //cartRepo.updateCart(LocalDate.now(), 0, cartId);
     }
 
 }

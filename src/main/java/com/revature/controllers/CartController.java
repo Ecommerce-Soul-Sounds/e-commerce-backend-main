@@ -3,10 +3,12 @@ package com.revature.controllers;
 import static com.revature.util.ClientMessageUtil.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import com.revature.dtos.CartItemDTO;
+import com.revature.util.ClientMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +47,13 @@ public class CartController {
         User userLoggedIn = (User) session.getAttribute("user");
 
         if (userLoggedIn != null) {
+//            Optional<Cart> currentUserCart = cartService.findById(userLoggedIn.getCart().getId());
+//
+//            if (currentUserCart.isPresent()) {
+//                return currentUserCart.get();
+//            } else {
+//                throw new CartErrorException("Cart Not Found");
+//            }
             Cart currentUserCart = cartService.findById(userLoggedIn.getCart().getId());
             if (currentUserCart != null) {
                 return currentUserCart;
@@ -80,20 +89,23 @@ public class CartController {
 
     @Authorized
     @PostMapping("/add-item")
-    public @ResponseBody String addCartItem(@RequestBody CartItemDTO cartItemDTO, HttpSession session) {
+    public @ResponseBody ClientMessage addCartItem(@RequestBody CartItemDTO cartItemDTO, HttpSession session) {
         User userLoggedIn = (User) session.getAttribute("user");
-        cartService.update(userLoggedIn.getCart());
+//        cartService.update(userLoggedIn.getCart());
+        System.out.println("User Cart" + cartService.findById(userLoggedIn.getCart().getId()));
         boolean success = cartService.addCartItem(userLoggedIn.getCart(), cartItemDTO.getProductId(), cartItemDTO.getQuantity());
-        return success ? "Item added to Cart" : "Something went wrong, item was not added to Cart.";
+        userLoggedIn.setCart(cartService.findById(userLoggedIn.getCart().getId()));
+        return success ? ADD_CART_ITEM_SUCCESSFUL : ADD_CART_ITEM_FAILED;
     }
 
     @Authorized
     @DeleteMapping("/delete-item")
-    public @ResponseBody String deleteCartItem(@RequestBody int productId, HttpSession session) {
+    public @ResponseBody ClientMessage deleteCartItem(@RequestBody CartItemDTO cartItemDTO, HttpSession session) {
         User userLoggedIn = (User) session.getAttribute("user");
-        boolean success = cartService.deleteCartItem(userLoggedIn.getCart(), productId);
-        return success ? "Item successfully removed from your Cart."
-                : "Something went wrong, item could not be removed.";
+        cartService.deleteCartItem(userLoggedIn.getCart(), cartItemDTO.getId(), cartItemDTO.getQuantity());
+//        return success ? "Item successfully removed from your Cart."
+//                : "Something went wrong, item could not be removed.";
+        return DELETION_SUCCESSFUL;
     }
 
     @Authorized
@@ -107,5 +119,15 @@ public class CartController {
     @GetMapping("/order-items")
     public @ResponseBody List<CartItem> getPreviousOrderCartItems(@RequestParam int cartId) {
         return cartService.getCartItemsByCartId(cartId);
+    }
+
+    @Authorized
+    @DeleteMapping("/empty")
+    public @ResponseBody ClientMessage emptyCart(HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+        cartService.emptyCart(loggedInUser.getCart().getId());
+        cartService.update(loggedInUser.getCart());
+
+        return DELETION_SUCCESSFUL;
     }
 }

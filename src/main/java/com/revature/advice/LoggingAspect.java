@@ -50,6 +50,8 @@ public class LoggingAspect {
 	
 	@AfterReturning(value="execution(* com.revature.repositories.*.*(..))", returning = "result")
 	public void logAfterDAO(JoinPoint jp, Object result) {
-		log.debug("Exiting dao method - [ {} : {} ]: returning {}", jp.getTarget().getClass().getName(), jp.getSignature().getName(), result.toString());
+		if (result != null) {
+			log.debug("Exiting dao method - [ {} : {} ]: returning {}", jp.getTarget().getClass().getName(), jp.getSignature().getName(), result.toString());
+		}
 	}
 }

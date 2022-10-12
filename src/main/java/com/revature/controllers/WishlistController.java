@@ -1,11 +1,13 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.models.ClientMessage;
 import com.revature.models.User;
 import com.revature.models.Wishlist;
 import com.revature.models.WishlistItem;
 
 import com.revature.services.WishlistService;
+import com.revature.util.ClientMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,16 +39,16 @@ public class WishlistController {
 
 	@Authorized
 	@PostMapping("/add-item")
-	public @ResponseBody String addWishlistItem(@RequestBody int productId, HttpSession session) {
+	public @ResponseBody ClientMessage addWishlistItem(@RequestBody int productId, HttpSession session) {
 		User loggedInUser = (User) session.getAttribute("user");
 		wishlistService.updateWishlist(loggedInUser.getWishlist());
 		boolean success = wishlistService.addWishlistItem(loggedInUser.getWishlist(), productId);
-		return success ? "Item added to wishlist" : "Something went wrong, item was not added to wishlist." ;
+		return success ? ClientMessageUtil.WISHLIST_ITEM_ADDITION_SUCCESSFUL : ClientMessageUtil.WISHLIST_ITEM_ADDITION_FAILED ;
 	}
 
 	@Authorized
 	@DeleteMapping("/delete-item")
-	public @ResponseBody String deleteWishlistItem(@RequestBody int productId, HttpSession session) {
+	public @ResponseBody String deleteWishlistItem(@RequestParam int productId, HttpSession session) {
 		User loggedInUser = (User) session.getAttribute("user");
 		boolean success = wishlistService.deleteWishlistItem(loggedInUser.getWishlist(), productId);
 		return success ? "Item successfully removed from your wishlist." : "Something went wrong, item could not be removed.";
