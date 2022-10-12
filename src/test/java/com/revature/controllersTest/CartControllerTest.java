@@ -225,7 +225,7 @@ public class CartControllerTest {
         u1.setCart(cart1);
         session.setAttribute("user", u1);
 
-        when(cartService.deleteCartItem(u1.getCart(), 1)).thenReturn(true);
+        when(cartService.deleteCartItem(u1.getCart(), 1, 1)).thenReturn(true);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/api/cart/delete-item")
                 .accept(MediaType.APPLICATION_JSON_VALUE).content(om.writeValueAsString(1))

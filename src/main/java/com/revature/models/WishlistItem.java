@@ -26,11 +26,11 @@ public class WishlistItem {
 	@Column(name="wishlist_item_id")
 	private int id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "product_id", referencedColumnName = "product_id")
 	private Product product;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="wishlist_id", referencedColumnName = "wishlist_id")
 	private Wishlist wishlist;
 }
