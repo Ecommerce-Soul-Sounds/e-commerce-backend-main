@@ -1,5 +1,6 @@
 package com.revature.controllersTest;
 
+import static com.revature.util.ClientMessageUtil.UPDATE_SUCCESSFUL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -35,11 +36,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revature.controllers.WishlistController;
 import com.revature.models.Address;
 import com.revature.models.Cart;
+import com.revature.models.ClientMessage;
 import com.revature.models.Product;
 import com.revature.models.User;
 import com.revature.models.Wishlist;
 import com.revature.models.WishlistItem;
 import com.revature.services.WishlistService;
+import com.revature.util.ClientMessageUtil;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(WishlistController.class)
@@ -189,7 +192,7 @@ public class WishListControllerTest {
                 .content(om.writeValueAsString(mockProduct1.getId()))
                 .contentType(MediaType.APPLICATION_JSON).session(session);
         MvcResult result = mockmvc.perform(request).andReturn();
-        assertEquals(("Item added to wishlist"), result.getResponse().getContentAsString());
+        assertEquals("{"+"\"message\""+":"+"\"ITEM SUCCESSFULLY ADDED\""+"}", result.getResponse().getContentAsString());
 
     }
 

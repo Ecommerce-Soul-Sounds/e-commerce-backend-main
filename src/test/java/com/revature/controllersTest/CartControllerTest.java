@@ -220,8 +220,7 @@ public class CartControllerTest {
     @Order(6)
     @DisplayName("6. Delete CartItem Test")
     public void testDeleteCartItem() throws Exception {
-        CartItemDTO newCartItemDTO = new CartItemDTO(1, 1, 1);
-
+    	CartItemDTO newCartItemDTO = new CartItemDTO(1, 1, 1);
         MockHttpSession session = new MockHttpSession();
         u1.setCart(cart1);
         session.setAttribute("user", u1);
